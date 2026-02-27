@@ -1,0 +1,61 @@
+@startuml
+!theme plain
+skinparam backgroundColor transparent
+skinparam defaultFontName Arial
+skinparam node {
+    BackgroundColor #E3F2FD
+    BorderColor #2196F3
+    RoundCorner 15
+}
+skinparam class {
+    BackgroundColor #FFFFFF
+    BorderColor #4CAF50
+    ArrowColor #333333
+}
+skinparam note {
+    BackgroundColor #FFF9C4
+    BorderColor #FFC107
+}
+
+node "Spring Context Cache (JVM)" as springCache {
+    class "AbstractIntegrationTest" as abstractTest << (C,#FF9800) Base Class >> {
+        -- Configuration --
+        @SpringBootTest
+        @AutoConfigureMockMvc
+        -- Centralized Mocks --
+        @MockBean ModulationRequestSource
+        @MockBean ImportMonitorService
+        @SpyBean ModulationService
+        -- Security Helpers --
+        + setAuth()
+        + setCustomAuth()
+    }
+}
+
+note right of abstractTest
+  **(99.5% Cache Hit Rate)** :
+  Cette infrastructure lourde (2000+ beans)
+  n'est chargée qu'**une seule fois** (gain de ~45 secondes par classe fille).
+end note
+
+package "Suite de Tests d'Intégration (Exécution Rapide)" {
+    class "ServiceAccountTest" as test1
+    class "RegisteredParcelServiceIntegrationTest" as test2
+    class "ModulationControllerTest" as test3
+    note "..." as moreTests
+}
+
+test1 -up-|> abstractTest : hérite
+test2 -up-|> abstractTest : hérite
+test3 -up-|> abstractTest : hérite
+moreTests .up.> abstractTest
+
+note bottom of moreTests
+  **Règle d'or de l'équipe :**
+  Interdiction stricte d'ajouter des
+  @MockBean ou @DirtiesContext
+  dans les classes filles sous peine
+  de détruire le cache partagé !
+end note
+
+@enduml

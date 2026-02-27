@@ -32,100 +32,174 @@
 
 // --- Page de Titre ---
 #align(center + horizon)[
-  #text(size: 20pt, weight: "bold")[Standardisation et Optimisation\ de la Stratégie de Test]
+  #text(size: 20pt, weight: "bold")[Standardisation des Tests Logiciels\ en Architecture Microservices]
 
   #v(1cm)
-  #text(size: 14pt)[Projet Farmstar 4 - Stack Java Spring Boot]
+  #text(size: 14pt)[Projet Magellium - Stack Java Spring Boot]
 
   #v(2cm)
-  *Auteur :* Étudiant Ingénieur 5A \
+  *Auteur :* ANTUNES Axel\
   *Date :* #datetime.today().display("[day] [month repr:long] [year]")
 ]
 #pagebreak()
 
 // --- Contenu ---
 
-= Introduction et État des Lieux
+= Introduction
 
-Sur le projet Farmstar 4, l'utilisation systématique de tests lourds (via `@SpringBootTest`) a entraîné une forte perte de performance lors de l'intégration continue (CI).
+L'analyse de performance récent sur le module `fs-core` a mis en évidence des temps de build excessifs (supérieurs à 6 minutes) dus à une mauvaise gestion du cycle de vie des tests. Ce document définit les standards à appliquer pour réduire la boucle de feedback (Feedback Loop)#footnote[Feedback Loop : Délai entre l'écriture du code et le retour d'information du test. Plus ce délai est court, plus la correction est efficace.] et optimiser la consommation des ressources.
 
-Le contexte Spring et l'infrastructure sous-jacente sont fréquemment rechargés entre les classes de tests, créant une "taxe de démarrage" qui allonge inutilement la boucle de feedback des développeurs. Ce document définit la nouvelle doctrine de test pour fiabiliser, alléger et accélérer nos développements.
+= La Pyramide des Tests
 
-= La Nouvelle Doctrine : L'Arbre de Décision
+Nous adoptons le modèle de la pyramide des tests.
 
-Afin d'optimiser le rapport coût/bénéfice et de garantir une exécution rapide, chaque nouveau test doit suivre cet arbre de décision formel :
+== Répartition Cible
 
-- *Je teste un calcul complexe, une règle métier ou un Mapper ?* \
-  $=>$ *Test Unitaire Pur (Mockito).* Exécution en millisecondes, aucune dépendance au framework Spring.
-- *Je teste une requête en base de données ou un service d'infrastructure ?* \
-  $=>$ *Test d'Intégration Mutualisé.* Héritage obligatoire de la classe abstraite pour réutiliser le contexte Spring existant.
-- *Je vérifie le contrat d'interface (Statut HTTP, format JSON, Sécurité) d'une API ?* \
-  $=>$ *Smoke Test / Validation d'API (Bruno).* Délégation de la validation (disponibilité et contrats) hors du code Java pour ne pas alourdir la compilation.
+- *Unitaires (70%) :* Socle de la stabilité. Exécution instantanée en millisecondes.
+- *Intégration (20%) :* Validation des interfaces et configurations (BDD, mutualisation Spring).
+- *E2E / API (10%) :* Validation des flux critiques par un client externe hors JVM.
 
-= Les Templates de Code (Standards de l'équipe)
+= Implémentation Technique
 
-== Le Test Unitaire Pur (80% des cas)
-*Objectif :* Isolation totale. Le contexte Spring *ne doit pas* être chargé.
+== Tests Unitaires (Unit Tests)
+
+*Rôle et Utilité :*
+Validation de la logique algorithmique interne de manière isolée. L'exécution doit s'effectuer en quelques millisecondes.
+
+*Périmètre :* Classes de service, utilitaires, règles métier.
+*Contrainte :* Isolation totale. Aucun contexte Spring ne doit être chargé.
 
 #sourcecode[```java
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-@ExtendWith(MockitoExtension.class) // AUCUN @SpringBootTest ici
-class ParcelRecommendationServiceTest {
-
-    @Mock
-    private ParcelRepository repository; // Dépendance simulée par Mockito
-
-    @InjectMocks
-    private ParcelRecommendationService service; // Classe réelle à tester
+// MAUVAISE PRATIQUE : SpringBootTest (Lourd et inadapté)
+@SpringBootTest // Charge tout le contexte applicatif inutilement
+class CommandeServiceTest {
+    @Autowired private CommandeService service;
+    @MockBean private Repository repo;
 
     @Test
-    void shouldCalculateRecommendation() {
-        // Arrange, Act, Assert (Exécution ultra rapide, < 50ms)
+    void calculTva_nominal() {
+        when(repo.getTaux()).thenReturn(20.0);
+        // ...
+    }
+}
+
+// BONNE PRATIQUE : MockitoExtension (Rapide et isolé)
+@ExtendWith(MockitoExtension.class)
+class CommandeServiceTest {
+    @Mock private Repository repo;
+    @InjectMocks private Service service;
+
+    @Test
+    void calculTva_nominal() {
+        when(repo.getTaux()).thenReturn(20.0);
+        // ...
     }
 }
 ```]
 
-== Le Test d'Intégration Mutualisé (20% des cas)
-*Objectif :* Éviter le rechargement du contexte (`ApplicationContext`). Tous les tests d'intégration partagent désormais la même configuration d'infrastructure gelée.
+== Tests d'Intégration (Integration Tests) et "Slice Testing"
+
+*Rôle et Utilité :*
+Vérification des interactions entre les composants logiciels et l'infrastructure (Base de données, API externes, requêtes HTTP).
+
+*L'écueil du Monolithe de Test :*
+L'utilisation systématique de `@SpringBootTest` charge l'intégralité de l'application (plus de 2000 beans constatés lors de l'audit de `fs-core`). Le temps de "Cold Start" atteint environ 45 secondes pour un seul test.
+
+*Solution :* Le "Slice Testing"#footnote[Slice Testing : Technique consistant à ne charger qu'une "tranche" du contexte Spring (ex: uniquement la couche Web avec `@WebMvcTest`) pour réduire le nombre de beans, abaissant ainsi le temps de démarrage.].
 
 #sourcecode[```java
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+// MAUVAISE PRATIQUE : Chargement complet pour un contrôleur
+@SpringBootTest
+@AutoConfigureMockMvc
+class NdoseControllerTest {
+    @Autowired MockMvc mockMvc;
+    // Démarrage : ~45 secondes (2006 beans chargés)
+}
 
-// On hérite de la classe mère, on ne déclare PLUS de @MockBean spécifiques ici
-class ParcelRepositoryIntegrationTest extends AbstractIntegrationTest {
-
-    @Autowired
-    private ParcelRepository repository; // Vraie interaction avec la BDD
-
-    @Test
-    void shouldSaveAndRetrieveParcel() {
-        // Le contexte Spring est déjà "chaud", le test s'exécute immédiatement.
-    }
+// BONNE PRATIQUE : "Slice Test" Web
+@WebMvcTest(NdoseController.class)
+class NdoseControllerTest {
+    @Autowired MockMvc mockMvc;
+    @MockBean NdoseService service;
+    // Démarrage : ~3 secondes (Uniquement la couche HTTP/Sécurité)
 }
 ```]
 
-#note[
-  L'utilisation de la classe `AbstractIntegrationTest` permet de geler l'arbre des dépendances. Toute altération du contexte dans une classe fille (ex: ajout d'un `@MockBean` ou d'un `@DirtiesContext`) cassera le cache Spring et forcera un redémarrage complet, pénalisant toute la suite de tests.
-]
+== Tests API avec Bruno (Smoke Tests & E2E)
 
-== Validation de surface (Smoke Testing avec Bruno)
-*Périmètre actuel :* Validation de la disponibilité et des contrats d'interface (139 Smoke Tests existants). \
-*Outil :* Bruno (Collections versionnées).
+*Rôle et Utilité :*
+Validation du système du point de vue d'un client externe en condition réelle (boîte noire). L'objectif est de s'affranchir du contexte Java (JVM) pour valider les contrats HTTP et les scénarios métiers complexes de bout en bout.
 
-La stratégie adoptée consiste à utiliser Bruno comme premier filet de sécurité. Ces tests garantissent instantanément que les endpoints répondent et respectent le format JSON attendu, sans lancer de contexte Java.
+Nous divisons ces tests en deux catégories distinctes, s'exécutant sur des environnements isolés via Bruno.
 
-*Roadmap et bonnes pratiques :*
-1. Lors du développement d'un nouveau contrôleur, il est désormais demandé d'ajouter les requêtes correspondantes dans la collection Bruno du projet.
-2. À moyen terme, l'objectif est de remplacer une grande partie des tests d'intégration Java (historiquement réalisés avec `MockMvc`) par des tests Bruno. Cela permettra de décharger le monolithe au profit de tests de type "boîte noire", plus rapides et totalement indépendants du code métier.
+=== 1. Les Smoke Tests (Tests de Surface)
+*Objectif :* Vérifier instantanément la disponibilité des endpoints et la conformité des contrats de données (HATEOAS, formats JSON) sans altérer l'état de la base de données.
+*Périmètre :* Essentiellement des requêtes `GET` classées par domaines (ex: `01-Identity-Security`, `02-Agronomy`).
+*Environnement cible :* `admin, farmer etc.` (à discutter avec Mathieu).
 
-= Conclusion et Perspectives
+=== 2. Les Tests d'Intégration End-to-End (E2E)
+*Objectif :* Valider des cycles de vie complets (ex: Création d'une coopérative -> Ajout d'un utilisateur -> Login ).
+*Environnement cible :* `integration` (Jeu de données isolé).
 
-L'application stricte de ces templates permet de transformer l'environnement de test en une constante prévisible et rapide.
+*Stratégie "Zéro-Nettoyage" (Clean-First) :*
+Pour garantir la rejouabilité infinie sur la CI sans générer de conflits en base de données (ex: erreurs `Duplicate Key`), chaque exécution doit générer ses propres identifiants uniques via les scripts `Pre Request` de Bruno.
 
-Pour les mois à venir, l'évolution technique majeure consistera à intégrer des *Testcontainers* (ex: images éphémères de PostgreSQL ou Fake-GCS) directement dans l'`AbstractIntegrationTest`. Cela permettra aux tests d'intégration de monter et démonter leur propre infrastructure à la volée, supprimant ainsi toute dépendance à l'état des conteneurs locaux (Docker Compose) de la machine du développeur.
+#sourcecode[```js
+// PRATIQUE REQUISE : Script Pre-Request Bruno (Génération dynamique)
+const uuid = require("uuid");
+bru.setVar("dynamicEmail", `user-${Date.now()}@agri.fr`);
+bru.setVar("coopId", uuid.v4());
+```]
+
+#sourcecode[```js
+// PRATIQUE REQUISE : Requête et Assertions robustes
+post {
+  url: {{baseUrl}}/api/users
+  body: json {
+    {
+      "email": "{{dynamicEmail}}",
+      "cooperativeId": "{{coopId}}"
+    }
+  }
+}
+
+assert {
+  res.status: in [200, 201]
+  res.body.id: isDefined
+  res.body.email: eq {{dynamicEmail}}
+}
+```]
+
+#note[L'exécution dans la CI s'effectue à la racine des collections "Smoke-Tests" et "Intégration" via les commandes : `bru run --env "roleSouhaité"` (smoke tests) et `bru run --env integration` (tests d'intégration).]
+
+= Performance et "Context Caching"
+
+La lenteur des suites de tests Java provient de la fragmentation du contexte Spring. L'outil `spring-test-profiler` a démontré que des variations de configuration forcent Spring à redémarrer le contexte applicatif plusieurs fois.
+
+*Problème :* L'utilisation de `@MockBean`, `@SpyBean`, `@DirtiesContext` ou `@Import` dans des classes de test individuelles modifie la signature du contexte. Le cache est invalidé, causant des "Cache Misses".
+
+*Solution :* Centraliser la configuration dans une classe parente abstraite pour mutualiser le démarrage.
+
+#sourcecode[```java
+// BONNE PRATIQUE : Contexte Partagé via héritage
+@SpringBootTest(classes = FarmstarCoreApplication.class)
+@AutoConfigureMockMvc
+public abstract class AbstractIntegrationTest {
+    // Les définitions spécifiques qui brisent le cache
+    // doivent être centralisées ici une seule fois.
+    @MockBean
+    protected ModulationRequestSource modulationRequestSource;
+
+    @SpyBean
+    protected ModulationService modulationService;
+}
+
+// Les tests héritent de la configuration, garantissant un "Cache Hit" (99%+)
+class ModulationRequestTest extends AbstractIntegrationTest {
+    // Le test utilise le contexte existant sans déclencher de redémarrage.
+}
+```]
+
+= Conclusion
+
+L'application de ces standards d'architecture de test pourrait permetre de résoudre les anomalies de performance identifiées lors de l'analyse des tests. La limitation stricte des redémarrages de contexte (via `AbstractIntegrationTest`) couplée à la réduction du poids d'initialisation (via `@WebMvcTest` et Bruno) pourrait aider à avoir un pipeline CI + optimal et + efficace pour l'ensemble de l'équipe.
