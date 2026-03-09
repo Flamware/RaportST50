@@ -47,7 +47,7 @@
 
 = Introduction
 
-L'analyse de performance récent sur le module `fs-core` a mis en évidence des temps de build excessifs (supérieurs à 6 minutes) dus à une mauvaise gestion du cycle de vie des tests. Ce document définit les standards à appliquer pour réduire la boucle de feedback (Feedback Loop)#footnote[Feedback Loop : Délai entre l'écriture du code et le retour d'information du test. Plus ce délai est court, plus la correction est efficace.] et optimiser la consommation des ressources.
+L'analyse de performance récente sur le module `fs-core` a mis en évidence des temps de build excessifs (supérieurs à 6 minutes) dus à une mauvaise gestion du cycle de vie des tests. Ce document définit les standards à appliquer pour réduire la boucle de feedback (Feedback Loop)#footnote[Feedback Loop : Délai entre l'écriture du code et le retour d'information du test. Plus ce délai est court, plus la correction est efficace.] et optimiser la consommation des ressources.
 
 = La Pyramide des Tests
 
@@ -56,8 +56,8 @@ Nous adoptons le modèle de la pyramide des tests.
 == Répartition Cible
 
 - *Unitaires (70%) :* Socle de la stabilité. Exécution instantanée en millisecondes.
-- *Intégration (20%) :* Validation des interfaces et configurations (BDD, mutualisation Spring).
-- *E2E / API (10%) :* Validation des flux critiques par un client externe hors JVM.
+- *Intégration (20%) :* Validation des interfaces internes et configurations (BDD, mutualisation Spring).
+- *E2E / API (10%) :* Validation des flux HTTP critiques par un client externe (Bruno).
 
 = Implémentation Technique
 
@@ -66,79 +66,74 @@ Nous adoptons le modèle de la pyramide des tests.
 *Rôle et Utilité :*
 Validation de la logique algorithmique interne de manière isolée. L'exécution doit s'effectuer en quelques millisecondes.
 
-*Périmètre :* Classes de service, utilitaires, règles métier.
-*Contrainte :* Isolation totale. Aucun contexte Spring ne doit être chargé.
+*Périmètre (Classes Primaires) :* DTOs, Entités, mappers, algorithmes purs et règles de calcul isolées. Ces classes se suffisent à elles-mêmes et ne dépendent d'aucun framework lourd.
+*Méthode (Données Primaires) :* Privilégier l'injection de données brutes via des générateurs statiques ou des "Data Providers" (ex: tests paramétrés) pour valider de multiples scénarios métier instantanément.
+*Contrainte :* Isolation totale. Interdiction stricte de charger un contexte Spring.
 
 #sourcecode[```java
-// MAUVAISE PRATIQUE : SpringBootTest (Lourd et inadapté)
+// MAUVAISE PRATIQUE : SpringBootTest (Lourd et inadapté pour du calcul pur)
 @SpringBootTest // Charge tout le contexte applicatif inutilement
-class CommandeServiceTest {
-    @Autowired private CommandeService service;
-    @MockBean private Repository repo;
+class DosageCalculatorTest {
+    @Autowired private DosageCalculator calculator;
 
     @Test
-    void calculTva_nominal() {
-        when(repo.getTaux()).thenReturn(20.0);
+    void calculate_nominal() {
         // ...
     }
 }
 
-// BONNE PRATIQUE : MockitoExtension (Rapide et isolé)
+// BONNE PRATIQUE n°1 : Isolation pure avec Mockito (si dépendances)
 @ExtendWith(MockitoExtension.class)
-class CommandeServiceTest {
-    @Mock private Repository repo;
-    @InjectMocks private Service service;
+class EligibilityServiceTest {
+    @Mock private CropRepository repository;
+    @InjectMocks private EligibilityService service;
 
     @Test
-    void calculTva_nominal() {
-        when(repo.getTaux()).thenReturn(20.0);
-        // ...
+    void verify_ShouldReturnTrue() {
+        when(repository.existsByName("WHEAT")).thenReturn(true);
+        assertTrue(service.verify("WHEAT"));
     }
+}
+
+// BONNE PRATIQUE n°2 : "Data-Driven Testing" pour les classes primaires
+@ParameterizedTest(name = "Culture: {0}, Surface: {1}ha => Dose attendue: {2}L")
+@CsvSource({
+    "WHEAT,  10.0,  400.0", // Injection des données primaires
+    "CORN,   20.0, 1000.0",
+    "BARLEY,  5.0,  150.0"
+})
+void calculateTotalDose_ShouldReturnCorrectValue(String type, double area, double expected) {
+    // Action sur une classe primaire pure
+    double result = DosageCalculator.calculate(type, area);
+
+    // Vérification instantanée
+    assertEquals(expected, result);
 }
 ```]
 
-== Tests d'Intégration (Integration Tests) et "Slice Testing"
+== Tests d'Intégration (Integration Tests)
 
 *Rôle et Utilité :*
-Vérification des interactions entre les composants logiciels et l'infrastructure (Base de données, API externes, requêtes HTTP).
+Vérification des interactions entre les composants logiciels internes et l'infrastructure (Base de données, connecteurs externes).
 
-*L'écueil du Monolithe de Test :*
-L'utilisation systématique de `@SpringBootTest` charge l'intégralité de l'application (plus de 2000 beans constatés lors de l'audit de `fs-core`). Le temps de "Cold Start" atteint environ 45 secondes pour un seul test.
+*Attention au Périmètre :* L'utilisation de `MockMvc` pour tester les contrôleurs et les flux HTTP est désormais proscrite en Java. Ces validations sont entièrement déléguées à l'outil Bruno. Les tests d'intégration Java se concentrent exclusivement sur les couches inférieures (Services et Repositories).
 
-*Solution :* Le "Slice Testing"#footnote[Slice Testing : Technique consistant à ne charger qu'une "tranche" du contexte Spring (ex: uniquement la couche Web avec `@WebMvcTest`) pour réduire le nombre de beans, abaissant ainsi le temps de démarrage.].
-
-#sourcecode[```java
-// MAUVAISE PRATIQUE : Chargement complet pour un contrôleur
-@SpringBootTest
-@AutoConfigureMockMvc
-class NdoseControllerTest {
-    @Autowired MockMvc mockMvc;
-    // Démarrage : ~45 secondes (2006 beans chargés)
-}
-
-// BONNE PRATIQUE : "Slice Test" Web
-@WebMvcTest(NdoseController.class)
-class NdoseControllerTest {
-    @Autowired MockMvc mockMvc;
-    @MockBean NdoseService service;
-    // Démarrage : ~3 secondes (Uniquement la couche HTTP/Sécurité)
-}
-```]
+*Contrainte :* Utilisation obligatoire du contexte mutualisé (voir section "Performance et Context Caching") pour éviter la "taxe de démarrage" (Cold Start) qui allongeait le temps de build.
 
 == Tests API avec Bruno (Smoke Tests & E2E)
 
 *Rôle et Utilité :*
-Validation du système du point de vue d'un client externe en condition réelle (boîte noire). L'objectif est de s'affranchir du contexte Java (JVM) pour valider les contrats HTTP et les scénarios métiers complexes de bout en bout.
+Validation du système du point de vue d'un client externe en condition réelle (boîte noire). C'est le remplacement complet des anciens tests `MockMvc`. L'objectif est de s'affranchir du contexte Java (JVM) pour valider les contrats HTTP et les scénarios métiers de bout en bout.
 
 Nous divisons ces tests en deux catégories distinctes, s'exécutant sur des environnements isolés via Bruno.
 
-=== 1. Les Smoke Tests (Tests de Surface)
-*Objectif :* Vérifier instantanément la disponibilité des endpoints et la conformité des contrats de données (HATEOAS, formats JSON) sans altérer l'état de la base de données.
+=== Les Smoke Tests (Tests de Surface)
+*Objectif :* Vérifier instantanément la disponibilité des endpoints et la conformité des contrats de données sans altérer l'état de la base de données.
 *Périmètre :* Essentiellement des requêtes `GET` classées par domaines (ex: `01-Identity-Security`, `02-Agronomy`).
-*Environnement cible :* `admin, farmer etc.` (à discutter avec Mathieu).
+*Environnement cible :* `admin, farmer etc.` (à discuter).
 
-=== 2. Les Tests d'Intégration End-to-End (E2E)
-*Objectif :* Valider des cycles de vie complets (ex: Création d'une coopérative -> Ajout d'un utilisateur -> Login ).
+=== Les Tests d'Intégration End-to-End (E2E)
+*Objectif :* Valider des cycles de vie complets (ex: Création d'une coopérative -> Ajout d'un utilisateur -> Login).
 *Environnement cible :* `integration` (Jeu de données isolé).
 
 *Stratégie "Zéro-Nettoyage" (Clean-First) :*
@@ -183,7 +178,6 @@ La lenteur des suites de tests Java provient de la fragmentation du contexte Spr
 #sourcecode[```java
 // BONNE PRATIQUE : Contexte Partagé via héritage
 @SpringBootTest(classes = FarmstarCoreApplication.class)
-@AutoConfigureMockMvc
 public abstract class AbstractIntegrationTest {
     // Les définitions spécifiques qui brisent le cache
     // doivent être centralisées ici une seule fois.
@@ -202,4 +196,4 @@ class ModulationRequestTest extends AbstractIntegrationTest {
 
 = Conclusion
 
-L'application de ces standards d'architecture de test pourrait permetre de résoudre les anomalies de performance identifiées lors de l'analyse des tests. La limitation stricte des redémarrages de contexte (via `AbstractIntegrationTest`) couplée à la réduction du poids d'initialisation (via `@WebMvcTest` et Bruno) pourrait aider à avoir un pipeline CI + optimal et + efficace pour l'ensemble de l'équipe.
+L'application de ces standards d'architecture de test permet de résoudre les anomalies de performance identifiées lors de l'analyse. La limitation stricte des redémarrages de contexte (via `AbstractIntegrationTest`) couplée à la délégation totale des flux HTTP à Bruno garantissent un pipeline CI plus optimal et plus efficace pour l'ensemble de l'équipe.
