@@ -57,7 +57,7 @@ Nous adoptons le modèle de la pyramide des tests.
 
 - *Unitaires (70%) :* Socle de la stabilité. Exécution instantanée en millisecondes.
 - *Intégration (20%) :* Validation des interfaces internes et configurations (BDD, mutualisation Spring).
-- *E2E / API (10%) :* Validation des flux HTTP critiques par un client externe (Bruno).
+- *E2E / Smoke (10%) :* Validation des flux critiques, répartie entre API backend (Bruno) et UI frontend (Playwright).
 
 = Implémentation Technique
 
@@ -129,11 +129,14 @@ Nous divisons ces tests en deux catégories distinctes, s'exécutant sur des env
 
 === Les Smoke Tests (Tests de Surface)
 *Objectif :* Vérifier instantanément la disponibilité des endpoints et la conformité des contrats de données sans altérer l'état de la base de données.
+
 *Périmètre :* Essentiellement des requêtes `GET` classées par domaines (ex: `01-Identity-Security`, `02-Agronomy`).
-*Environnement cible :* `admin, farmer etc.` (à discuter).
+
+*Environnement cible :* `admin, farmer etc.`
 
 === Les Tests d'Intégration End-to-End (E2E)
 *Objectif :* Valider des cycles de vie complets (ex: Création d'une coopérative -> Ajout d'un utilisateur -> Login).
+
 *Environnement cible :* `integration` (Jeu de données isolé).
 
 *Stratégie "Zéro-Nettoyage" (Clean-First) :*
@@ -165,7 +168,46 @@ assert {
 }
 ```]
 
-#note[L'exécution dans la CI s'effectue à la racine des collections "Smoke-Tests" et "Intégration" via les commandes : `bru run --env "roleSouhaité"` (smoke tests) et `bru run --env integration` (tests d'intégration).]
+#note[L'exécution dans la CI s'effectue à la racine des collections "Smoke-Tests" et "Intégration" via la commande : `bru run --env 'fichier-conf']
+
+== Tests Frontend avec Playwright (Smoke Tests & E2E UI)
+
+*Rôle et Utilité :*
+Validation des parcours utilisateur réels côté navigateur (boîte noire UI), incluant rendu, interactions et navigation. Playwright complète Bruno : Bruno valide les contrats HTTP, Playwright valide l'expérience utilisateur de bout en bout.
+
+=== Smoke UI (Tests de Surface Frontend)
+*Objectif :* Détecter rapidement une régression bloquante sur les écrans critiques (chargement page, authentification, navigation principale).
+
+*Périmètre :* Un parcours minimal par domaine fonctionnel, sans dépendance à des données fragiles.
+
+*Environnement cible :* `staging` ou environnement de validation stable.
+
+*Contrainte :* Exécution rapide, assertions robustes (éviter les sélecteurs CSS volatils), usage prioritaire de `data-testid`.
+
+=== E2E UI (Parcours Métiers Critiques)
+*Objectif :* Valider des scénarios complets côté utilisateur (ex: login -> consultation -> action métier -> confirmation visuelle).
+
+*Périmètre :* Cas critiques orientés valeur métier, en nombre limité pour conserver un temps de pipeline maîtrisé.
+
+*Environnement cible :* `integration` (jeu de données dédié et stable).
+
+*Contrainte :* Isolation des tests (données uniques), interdiction des `wait` arbitraires, synchronisation via assertions explicites.
+
+#sourcecode[```ts
+import { test, expect } from "@playwright/test";
+
+test("smoke: login utilisateur", async ({ page }) => {
+  await page.goto("/login");
+  await page.getByTestId("email").fill("user@example.com");
+  await page.getByTestId("password").fill("password");
+  await page.getByRole("button", { name: "Se connecter" }).click();
+
+  // Assertion fonctionnelle stable: vérifier un élément métier visible
+  await expect(page.getByTestId("dashboard-title")).toBeVisible();
+});
+```]
+
+#note[En CI, exécuter les tests Playwright sur un environnement déterministe, publier le rapport HTML et les traces en artefacts pour faciliter le diagnostic des échecs intermittents.]
 
 = Performance et "Context Caching"
 
@@ -193,7 +235,13 @@ class ModulationRequestTest extends AbstractIntegrationTest {
     // Le test utilise le contexte existant sans déclencher de redémarrage.
 }
 ```]
+= Outils et Frameworks Recommandés
+- *Tests Unitaires :* JUnit 5, Mockito, AssertJ pour une syntaxe fluide et expressive.
+- *Tests d'Intégration :* Spring Boot Test (sans `MockMvc`)
+- *Tests API backend :* Bruno pour les scénarios E2E et Smoke Tests HTTP.
+- *Tests frontend web :* Playwright pour les smoke tests UI et parcours E2E critiques.
+- *Analyse Statique :* SonarLint intégré dans les pre-commit hooks pour garantir la qualité du code avant même qu'il n'entre dans la pipeline CI/CD.
 
 = Conclusion
 
-L'application de ces standards d'architecture de test permet de résoudre les anomalies de performance identifiées lors de l'analyse. La limitation stricte des redémarrages de contexte (via `AbstractIntegrationTest`) couplée à la délégation totale des flux HTTP à Bruno garantissent un pipeline CI plus optimal et plus efficace pour l'ensemble de l'équipe.
+L'application de ces standards d'architecture de test permet de résoudre les anomalies de performance identifiées lors de l'analyse. La limitation stricte des redémarrages de contexte (via `AbstractIntegrationTest`), couplée à la délégation des validations HTTP/API à Bruno et des parcours UI à Playwright, garantit un pipeline CI plus optimal et plus efficace pour l'ensemble de l'équipe.
