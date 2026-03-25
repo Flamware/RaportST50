@@ -52,4 +52,4 @@ const timer = setInterval(() => {
         console.log("\nStage terminé ! Rapport final déposé.");
         clearInterval(timer);
     }
-}, 1000); // Mise à jour chaque seconde pour la fluidité des décimales
+}, 1000);
