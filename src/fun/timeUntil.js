@@ -5,7 +5,29 @@ const endTime = new Date("July 24, 2026 00:00:00").getTime();
 const startTime = new Date("February 09, 2026 00:00:00").getTime();
 const totalDuration = endTime - startTime;
 
-// Fonction pour compter uniquement les jours de semaine (Lundi-Vendredi)
+// Liste des jours fériés en France pour 2026 (format YYYY-MM-DD)
+const holidays = [
+    "2026-01-01", // Jour de l'an
+    "2026-04-05", // Pâques (dimanche)
+    "2026-04-06", // Lundi de Pâques
+    "2026-05-01", // Fête du Travail
+    "2026-05-08", // Victoire 1945
+    "2026-05-14", // Ascension
+    "2026-05-24", // Pentecôte (dimanche)
+    "2026-05-25", // Lundi de Pentecôte
+    "2026-07-14", // Fête Nationale
+    "2026-08-15", // Assomption
+    "2026-11-01", // Toussaint
+    "2026-11-11", // Armistice
+    "2026-12-25", // Noël
+];
+
+// Fonction utilitaire pour formater une date en YYYY-MM-DD
+function formatDate(date) {
+    return date.toISOString().slice(0, 10);
+}
+
+// Fonction pour compter uniquement les jours de semaine (Lundi-Vendredi), hors jours fériés
 function getWorkingDaysLeft(now, end) {
     let count = 0;
     let cur = new Date(now);
@@ -13,7 +35,11 @@ function getWorkingDaysLeft(now, end) {
 
     while (cur < finish) {
         const dayOfWeek = cur.getDay();
-        if (dayOfWeek !== 0 && dayOfWeek !== 6) { // Hors Dimanche (0) et Samedi (6)
+        const curDateStr = formatDate(cur);
+        if (
+            dayOfWeek !== 0 && dayOfWeek !== 6 && // Hors Dimanche (0) et Samedi (6)
+            !holidays.includes(curDateStr) // Hors jours fériés
+        ) {
             count++;
         }
         cur.setDate(cur.getDate() + 1);
