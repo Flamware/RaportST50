@@ -37,7 +37,6 @@ C'est ce qu'on appelle le "syndrome de la méthode géante", difficile à mainte
 Le `GenericValidator` est une couche d'abstraction utilisant la **réflexion Java** pour automatiser la synchronisation entre le DTO et l'Entité.
 
 
-
 === Objectifs principaux
 - *Centralisation* : Les règles de validation sont regroupées dans une classe dédiée plutôt que dans le service métier.
 - *Automatisation* : Le validateur parcourt dynamiquement les propriétés du DTO.
