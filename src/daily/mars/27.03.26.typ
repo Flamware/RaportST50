@@ -20,19 +20,19 @@
 #line(length: 100%, stroke: 1pt)
 
 #align(center)[
-  #text(weight: "bold", size: 1.5em)[Fiche d'Activité : Mise en place du validateur générique]
+  #text(weight: "bold", size: 1.5em)[Fiche d'Activité : Mise en place du hydrateur générique]
 ]
 
 == Travaux réalisés
-Journée consacrée au développement et à l'intégration du validateur générique pour simplifier la gestion des stratégies.
+Journée consacrée au développement et à l'intégration du hydrateur générique pour simplifier la gestion des stratégies.
 
-=== Implémentation du GenericValidator
-- Migration de la logique de validation de `StrategyService` vers `StrategyValidator` pour alléger le service métier.
+=== Implémentation du GenericHydrator
+- Migration de la logique de validation de `StrategyService` vers `StrategyHydrator` pour alléger le service métier.
 - Utilisation de la réflexion Java pour automatiser le mapping entre les DTO et les entités.
 - Déplacement des règles complexes sur les dates de livraison (intervalles, périodes de production) et la vérification des doublons de noms.
 
 === Correction et fiabilisation technique
-- Résolution des erreurs liées à l'instanciation des repositories dans le validateur (problème d'initialisation des champs `final`).
+- Résolution des erreurs liées à l'instanciation des repositories dans le hydrateur (problème d'initialisation des champs `final`).
 - Correction du moteur de réflexion pour assurer l'exécution des méthodes sur les bonnes instances (problème d'utilisation de `this` vs `sourceObject`).
 - Mise en cohérence des types de retour (booléens) pour piloter la mise à jour des champs.
 

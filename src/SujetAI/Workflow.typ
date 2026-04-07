@@ -69,7 +69,7 @@ Une fois le code reçu et "dé-moulé", l'assistant effectue une vérification f
   `Développeur` $arrow.r$ `Orchestrateur (Python)` $arrow.r$ `AST Parser` $arrow.r$ #text(red)[`[ PROXY / CLOUD ]`] $arrow.r$ `IA (Agents)` \
   #v(0.5em)
   #align(right)[
-    #text(blue)[`[ RETOUR ]`] $arrow.l$ `AST Inverse` $arrow.l$ `Validateur Standards` $arrow.l$ `IDE`
+    #text(blue)[`[ RETOUR ]`] $arrow.l$ `AST Inverse` $arrow.l$ `hydrateur Standards` $arrow.l$ `IDE`
   ]
 ]
 

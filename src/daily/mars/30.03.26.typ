@@ -24,10 +24,10 @@
 ]
 
 == Travaux réalisés
-Journée consacrée à la refonte architecturale du validateur générique, à la résolution de bugs critiques liés à la réflexion Java, et à la documentation du pattern pour l'équipe.
+Journée consacrée à la refonte architecturale du hydrateur générique, à la résolution de bugs critiques liés à la réflexion Java, et à la documentation du pattern pour l'équipe.
 
 === Refonte Architecturale et Sémantique
-- Changement de paradigme : évolution du `GenericValidator` vers un `GenericHydrator` pour mieux refléter son rôle de transfert de données et d'instanciation.
+- Changement de paradigme : évolution du `GenericHydrator` vers un `GenericHydrator` pour mieux refléter son rôle de transfert de données et d'instanciation.
 - Création des annotations métier `@HydrationField` (sur le DTO) et `@HydrationGuard` (sur les méthodes de validation) pour découpler la logique de mapping de la logique métier.
 - Refactorisation du `StrategyService` pour utiliser explicitement `createAndHydrate` lors des requêtes POST (création) et `hydrate` lors des requêtes PATCH (mise à jour), respectant ainsi le cycle de vie des entités JPA.
 
