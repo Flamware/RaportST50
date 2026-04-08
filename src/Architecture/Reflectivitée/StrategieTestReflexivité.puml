@@ -1,0 +1,48 @@
+@startuml
+skinparam shadowing false
+skinparam class {
+    BackgroundColor white
+    ArrowColor #2C3E50
+    BorderColor #2C3E50
+}
+
+package "Core Validator" {
+    abstract class AbstractGenericHydratorTest<T, D> {
+        # hydrator: GenericHydrator
+        + testCompleteHydration()
+        + testGuardValidationFails()
+        + testNonNullableFieldThrows()
+        {abstract} # createHydrator(): GenericHydrator
+        {abstract} # createValidDto(): D
+        {abstract} # assertFullHydration(T, D)
+    }
+}
+
+package "Strategy Hydrator Feature" {
+    class StrategyValidationTest {
+        # createHydrator() -> returns StrategyHydrator
+        # createValidDto() -> returns StrategyPostDto
+        # assertFullHydration() -> specific strategy checks
+    }
+
+    class StrategyHydrator {
+        <<@Component>>
+    }
+}
+
+AbstractGenericHydratorTest <|-- StrategyValidationTest : extends
+StrategyValidationTest o-- StrategyHydrator : uses (Autowired)
+
+note top of AbstractGenericHydratorTest
+  <b>Template Method Pattern</b>
+  Définit le squelette des tests unitaires
+  pour garantir la même rigueur partout.
+end note
+
+note bottom of StrategyValidationTest
+  <b>Concrete Test Class</b>
+  Fournit uniquement les données
+  métier (Strategy, DTO, Guards).
+end note
+
+@enduml
