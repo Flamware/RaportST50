@@ -14,7 +14,7 @@
 
 #align(center)[
   #block(inset: 15pt, fill: rgb("#f4f4f4"), radius: 4pt, stroke: rgb("#dddddd"))[
-    #text(size: 18pt, weight: "bold")[Industrialisation du Mapping & Validation] \
+    #text(size: 18pt, weight: "bold")[Mapping & Validation] \
     #v(0.5em)
     #text(size: 12pt, style: "italic", gray)[Pattern GenericHydrator : Réflexivité au service du Clean Code]
   ]
