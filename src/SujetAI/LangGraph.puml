@@ -1,0 +1,57 @@
+@startuml
+!theme toy
+skinparam componentStyle uml2
+
+title Architecture Système Farmstar - LangGraph & MCP
+
+' --- Interfaces et Entrées ---
+interface "Requête Utilisateur" as UI
+component [Parser Agent] as Parser << (N,#ADD1B2) Node >>
+
+' --- Orchestrateur Principal ---
+package "Main Graph" {
+    component [Main Router] as MainRouter
+
+    package "Test Coverage Subgraph" {
+        component [Internal Router] as TestRouter
+
+        component [Gatherer] as Gatherer
+        component [Analyzer] as Analyzer
+        component [Solver] as Solver
+
+        component [Tool Executor] as ToolNode << (T,#FBBC05) >>
+    }
+
+    package "Doc Gen Subgraph" {
+        component [Doc Generator] as DocGen
+    }
+}
+
+' --- Services Externes via MCP ---
+cloud "MCP Servers" {
+    [Farmstar-MCP] as MCP_Code
+    [Jira-MCP] as MCP_Jira
+}
+
+database "State Store" as DB
+
+' --- Liaisons et Flux ---
+UI --> Parser
+Parser --> MainRouter : ParsedInput
+MainRouter ..> TestRouter : "Task: Coverage"
+MainRouter ..> DocGen : "Task: Documentation"
+
+' Flux interne Test Coverage
+TestRouter --> Gatherer
+Gatherer <--> ToolNode : "tools_condition"
+[Analyzer] <--> ToolNode : "tools_condition"
+[Solver] <--> ToolNode : "tools_condition"
+ToolNode --> MCP_Code : "Read/Search"
+Gatherer --> Analyzer : "TestGathererOutput"
+Analyzer --> Solver : "TestAnalyzerOutput"
+
+' Persistance
+MainRouter -- DB
+TestRouter -- DB
+
+@enduml
