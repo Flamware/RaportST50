@@ -1,0 +1,85 @@
+@startuml Test Coverage Supervision - Use Cases Flux Bidirectionnel
+
+left to right direction
+
+skinparam backgroundColor #FDFEFE
+skinparam packageStyle rectangle
+skinparam usecaseBorderColor #2C3E50
+skinparam usecaseBackgroundColor #ECF0F1
+skinparam ArrowColor #34495E
+
+actor "Utilisateur" as User
+
+rectangle "Test Coverage Supervision Graph" {
+
+    package "0. SUPERVISEUR" {
+        usecase "Recevoir Prompt" as UC_Input
+        usecase "Superviseur:\n• Classifier tâche\n• Détecter code/gaps\n• Déterminer Type\n• Sélectionner Agents" as UC_Supervisor
+    }
+
+    package "1. FLUX RECHERCHE (Type: SEARCH)" {
+        usecase "Gatherer\n• Load: skill_gatherer\n• Execute & Generate Output" as UC_G1
+    }
+
+    package "2. FLUX EXPLICATION (Type: EXPLAIN/EXPLAIN_WITH_CODE)" {
+        usecase "Gatherer\n• Load: skill_gatherer\n• Execute & Generate Output" as UC_G2
+        usecase "Analyzer\n• Load: skill_analyzer_explain\n• Execute & Generate Output" as UC_A2
+        UC_G2 --> UC_A2 : Transmet données
+        UC_A2 <--> UC_G2 : Besoin contexte?\n(optionnel)
+    }
+
+    package "3. FLUX AUDIT (Type: AUDIT/AUDIT_WITH_CODE)" {
+        usecase "Gatherer\n• Load: skill_gatherer\n• Execute & Generate Output" as UC_G3
+        usecase "Analyzer\n• Load: skill_analyzer_audit\n• Execute & Generate Output" as UC_A3
+        UC_G3 --> UC_A3 : Transmet données
+        UC_A3 <--> UC_G3 : Besoin comparaison?\n(optionnel)
+    }
+
+    package "4. FLUX CRÉATION (Type: CREATE/QUICK_CREATE/SOLVER_ONLY)" {
+        usecase "Gatherer\n• Load: skill_gatherer\n• Execute & Generate Output" as UC_G4
+        usecase "Analyzer\n• Load: skill_analyzer_coverage\n• Execute & Generate Output" as UC_A4
+        usecase "Solver\n• Load: skill_solver_generation\n• Execute & Generate Output" as UC_S4
+        UC_G4 --> UC_A4 : Transmet données
+        UC_A4 --> UC_S4 : Transmet données
+        UC_A4 <--> UC_G4 : Besoin contexte?\n(optionnel)
+    }
+
+    package "5. FLUX METRIQUES (Type: METRICS)" {
+        usecase "Gatherer\n• Load: skill_gatherer" as UC_G5
+        usecase "Analyzer\n• Load: skill_analyzer_metrics" as UC_A5
+        UC_G5 --> UC_A5 : Transmet données
+    }
+
+    package "END" {
+        usecase "Retourner Réponse" as UC_End
+    }
+}
+
+' Flux principal
+User --> UC_Input : Envoie message
+UC_Input --> UC_Supervisor : Analyse
+
+' Routage
+UC_Supervisor --> UC_G1 : Type = SEARCH
+UC_Supervisor --> UC_G2 : Type = EXPLAIN*
+UC_Supervisor --> UC_G3 : Type = AUDIT*
+UC_Supervisor --> UC_G4 : Type = CREATE*
+UC_Supervisor --> UC_A2 : EXPLAIN_WITH_CODE:\ncode en prompt\n→ Analyzer direct\n(bypass Gatherer)
+UC_Supervisor --> UC_A3 : AUDIT_WITH_CODE:\ncode en prompt\n→ Analyzer direct\n(bypass Gatherer)
+UC_Supervisor --> UC_A4 : QUICK_CREATE:\ngaps en prompt\n→ Analyzer\n(bypass Gatherer)
+UC_Supervisor --> UC_S4 : SOLVER_ONLY:\ngap report en prompt\n→ Solver direct\n(bypass Gatherer + Analyzer)
+UC_Supervisor --> UC_G5 : Type = METRICS
+
+' Retours
+UC_G1 --> UC_End
+UC_A2 --> UC_End
+UC_A3 --> UC_End
+UC_S4 --> UC_End
+UC_A5 --> UC_End
+
+
+
+
+
+
+@enduml

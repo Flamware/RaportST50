@@ -1,0 +1,75 @@
+@startuml Test Coverage Supervision - Optimized
+
+' -- Configuration Visuelle --
+skinparam {
+    BackgroundColor #F9FBFC
+    ArrowColor #2C3E50
+    ActorBorderColor #2C3E50
+    UsecaseBackgroundColor #FFFFFF
+    UsecaseBorderColor #34495E
+    PackageBackgroundColor #F1F4F7
+    PackageBorderColor #B2BABB
+    NoteBackgroundColor #FEF9E7
+    NoteBorderColor #F7DC6F
+    DefaultFontName "Segoe UI"
+}
+
+left to right direction
+
+actor "Utilisateur" as User
+
+rectangle "Test Coverage Supervision System" {
+
+    ' -- Entrée --
+    usecase "<b>SUPERVISEUR</b>\n(Classification & Routage)" as Supervisor #D5F5E3
+
+    ' -- Pipeline Central d'Agents --
+    package "Processing Pipeline" {
+        usecase "<b>GATHERER</b>\n(Skill: Gatherer)" as Gatherer
+        usecase "<b>ANALYZER</b>\n(Skills: Audit, Explain, Metrics)" as Analyzer
+        usecase "<b>SOLVER</b>\n(Skill: Generation)" as Solver
+    }
+
+    ' -- Sortie --
+    usecase "<b>END</b>\n(Génération Réponse)" as End #E8DAEF
+}
+
+' -- Flux de Commandes (Entrée) --
+User --> Supervisor : Envoie Prompt
+
+' -- Logique de Routage (Points d'entrée dynamiques) --
+Supervisor ----> Gatherer : **Flux Standard**\n(Search, Explain, Audit, Create, Metrics)
+Supervisor ----> Analyzer : **Flux Court-circuit**\n(Code/Gaps fournis : Explain_with_code, Audit_with_code, Quick_create)
+Supervisor ----> Solver : **Flux Ultra-rapide**\n(Gap report fourni : Solver_only)
+
+' -- Flux Internes (Bidirectionnel & Pipeline) --
+Gatherer --> Analyzer : Transmission contexte
+Analyzer --> Solver : Transmission analyse
+Analyzer <--> Gatherer : **Bidirectionnel**\n(Besoin de contexte additionnel)
+
+' -- Flux de Sortie --
+Gatherer ----> End : Output (Search)
+Analyzer ----> End : Output (Explain, Audit, Metrics)
+Solver ----> End : Output (Generation)
+End --> User
+
+' -- Documentation Intégrée --
+note top of Supervisor
+  Détécte la présence de Code ou Gaps
+  dans **state["messages"]** pour choisir
+  le point d'entrée optimal.
+end note
+
+note bottom of Analyzer
+  <b>Intelligence Centrale :</b>
+  - Si prompt incomplet : Appelle Gatherer.
+  - Si code présent : Analyse directe.
+  - Sélectionne le Skill selon le Type.
+end note
+
+note bottom of Solver
+  Transforme le rapport de gaps
+  ou l'analyse en code de test.
+end note
+
+@enduml
