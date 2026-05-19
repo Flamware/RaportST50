@@ -233,7 +233,6 @@ class ModulationRequestTest extends AbstractIntegrationTest {
 ```
 
 ---
-
 ## 5. Outils et Frameworks Recommandés
 
 - **Tests Unitaires :** JUnit 5, Mockito, AssertJ pour une syntaxe fluide et expressive.
@@ -242,4 +241,12 @@ class ModulationRequestTest extends AbstractIntegrationTest {
 - **Tests frontend web :** Playwright pour les smoke tests UI et parcours E2E critiques.
 - **Analyse Statique :** SonarLint intégré dans les pre-commit hooks pour garantir la qualité du code avant même qu'il n'entre dans la pipeline CI/CD.
 
+##6. Documentation installtion Git Pré-Commit
+- **Installation package Python :** `pip install pre-commit`
+- **Activation du hook :** : `pre-commit install --hook-type commit-msg --hook-type pre-commit --hook-type pre-push`
+- **Commandes utiles au quotidien :**
+  - `pre-commit run --all-files` : Exécute tous les hooks sur tous les fichiers (utile pour un nettoyage global).
+  - `pre-commit run <hook_id>` : Exécute un hook spécifique sur tous les fichiers (ex: `pre-commit run checkstyle`).
+  - `git push --no-verify` : Contourne les hooks (à utiliser avec précaution, uniquement en cas de besoin urgent).
+  - `git commit --no-verify` : Contourne les hooks pour un commit spécifique (à utiliser avec précaution).
 ---
