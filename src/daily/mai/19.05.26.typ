@@ -12,7 +12,7 @@
   align(right)[
     #text(weight: "bold", size: 1.1em)[Magellium] \
     #text(size: 0.9em)[Projet : Farmstar Core Service] \
-    #text(size: 0.9em)[Date : 13 Mai 2026]
+    #text(size: 0.9em)[Date : 19 Mai 2026]
   ]
 )
 
