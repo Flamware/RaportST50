@@ -8,44 +8,47 @@ const currentYear = today.getFullYear();
 // Get number of days in current month
 const numberOfDaysInMonth = new Date(currentYear, monthIndex + 1, 0).getDate();
 
+// Jours fériés 2026
+const holidays2026 = [
+    new Date(2026, 0, 1).getTime(),  // Jour de l'an
+    new Date(2026, 3, 5).getTime(),  // Pâques
+    new Date(2026, 3, 6).getTime(),  // Lundi de Pâques
+    new Date(2026, 3, 24).getTime(), // Pentecôte (Avril en 2026 !)
+    new Date(2026, 3, 25).getTime(), // Lundi de Pentecôte
+    new Date(2026, 4, 1).getTime(),  // Fête du Travail
+    new Date(2026, 4, 8).getTime(),  // Victoire 1945
+    new Date(2026, 4, 14).getTime(), // Ascension
+    new Date(2026, 4, 15).getTime(), // Pont de l'Ascension
+    new Date(2026, 4, 29).getTime(), // Moto
+    new Date(2026, 6, 14).getTime(), // Fête Nationale
+];
+
 // Get the number of working days in a date range
 function getWorkingDaysBetween(year, month, startDay, endDay) {
+    if (startDay > endDay) return 0;
     let count = 0;
-    const holidays = [
-        "2026-01-01", // Jour de l'an
-        "2026-04-05", // Pâques (dimanche)
-        "2026-04-06", // Lundi de Pâques
-        "2026-05-01", // Fête du Travail
-        "2026-05-08", // Victoire 1945
-        "2026-05-14", // Ascension
-        "2026-05-24", // Pentecôte (dimanche)
-        "2026-05-25", // Lundi de Pentecôte
-        "2026-07-14", // Fête Nationale
-        "2026-08-15", // Assomption
-        "2026-11-01", // Toussaint
-        "2026-11-11", // Armistice
-        "2026-12-25", // Noël
-    ];
     for (let day = startDay; day <= endDay; day++) {
         const date = new Date(year, month - 1, day);
         const dayOfWeek = date.getDay();
-        const dateStr = date.toISOString().slice(0, 10);
-        if (
-            dayOfWeek !== 0 && dayOfWeek !== 6 && // Hors Dimanche (0) et Samedi (6)
-            !holidays.includes(dateStr) // Hors jours fériés
-        ) {
+
+        // On compare les timestamps calés à minuit pour éviter les décalages de fuseau horaire
+        const midnightTimestamp = new Date(year, month - 1, day, 0, 0, 0, 0).getTime();
+
+        const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+        const isHoliday = holidays2026.includes(midnightTimestamp);
+
+        if (!isWeekend && !isHoliday) {
             count++;
         }
     }
     return count;
 }
 
-// Get working days since beginning of month until today
-const workingDaysElapsed = getWorkingDaysBetween(currentYear, monthIndex + 1, 1, today.getDate());
-const hoursElapsed = workingDaysElapsed * 7;
-const salaryEarned = hoursElapsed * hourlySalary;
+// CORRECTION : On s'arrête à HIER (today.getDate() - 1) pour les jours révolus
+const workingDaysBeforeToday = getWorkingDaysBetween(currentYear, monthIndex + 1, 1, today.getDate() - 1);
+const hoursStrictlyElapsed = workingDaysBeforeToday * 7;
 
-// Get total working days in month (for progress bar total)
+// Total working days in month
 const totalWorkingDaysInMonth = getWorkingDaysBetween(currentYear, monthIndex + 1, 1, numberOfDaysInMonth);
 const totalHours = totalWorkingDaysInMonth * 7;
 const totalSalary = totalHours * hourlySalary;
@@ -57,9 +60,10 @@ const bar1 = new cliProgress.SingleBar({
     barIncompleteChar: '\u2591'
 }, cliProgress.Presets.shades_classic);
 
-bar1.start(totalHours, hoursElapsed, {
-    myPercentage: ((hoursElapsed / totalHours) * 100).toFixed(2),
-    currentSalary: salaryEarned.toFixed(2),
+// Initialisation de la barre avec 0 heure aujourd'hui (sera mis à jour dans 1 sec)
+bar1.start(totalHours, hoursStrictlyElapsed, {
+    myPercentage: ((hoursStrictlyElapsed / totalHours) * 100).toFixed(2),
+    currentSalary: (hoursStrictlyElapsed * hourlySalary).toFixed(2),
     totalSalary: totalSalary.toFixed(2)
 });
 
@@ -67,25 +71,30 @@ bar1.start(totalHours, hoursElapsed, {
 const timer = setInterval(() => {
     const now = new Date();
     const workDayStart = new Date(now);
-    workDayStart.setHours(8, 0, 0, 0); // Work day starts at 8:00 AM
+    workDayStart.setHours(8, 0, 0, 0);
     const workDayEnd = new Date(now);
-    workDayEnd.setHours(15, 0, 0, 0); // Work day ends at 3:00 PM (7 hours: 8am-3pm)
+    workDayEnd.setHours(15, 0, 0, 0);
+
+    const dayOfWeek = now.getDay();
+    const dateStr = now.toISOString().slice(0, 10);
+    const isWorkingDay = dayOfWeek !== 0 && dayOfWeek !== 6 && !holidays2026.includes(new Date(dateStr).getTime());
 
     let realHoursWorkedToday = 0;
 
-    // Calculate real hours worked today if within work hours
-    if (now >= workDayStart && now <= workDayEnd) {
-        realHoursWorkedToday = (now - workDayStart) / (1000 * 60 * 60); // Convert ms to hours
-    } else if (now > workDayEnd) {
-        realHoursWorkedToday = (workDayEnd - workDayStart) / (1000 * 60 * 60); // Full 7 hours if after work
+    if (isWorkingDay) {
+        if (now >= workDayStart && now <= workDayEnd) {
+            realHoursWorkedToday = (now - workDayStart) / (1000 * 60 * 60);
+        } else if (now > workDayEnd) {
+            realHoursWorkedToday = 7; // Journée terminée
+        }
     }
 
-    // Calculate total hours: previous days + today's real hours
-    const totalRealHoursWorked = hoursElapsed - (hoursElapsed % 7) + realHoursWorkedToday;
+    // CORRECTION : On ajoute simplement les heures du jour aux heures des jours passés
+    const totalRealHoursWorked = hoursStrictlyElapsed + realHoursWorkedToday;
 
     const percentage = Math.min((totalRealHoursWorked / totalHours) * 100, 100).toFixed(2);
     const currentSalary = (totalRealHoursWorked * hourlySalary).toFixed(2);
-    
+
     bar1.update(totalRealHoursWorked, {
         myPercentage: percentage,
         currentSalary: currentSalary,
