@@ -12,7 +12,7 @@
   align(right)[
     #text(weight: "bold", size: 1.1em)[Magellium] \
     #text(size: 0.9em)[Projet : Farmstar Core Service] \
-    #text(size: 0.9em)[Date : 22 juin 2026]
+    #text(size: 0.9em)[Date : 23 juin 2026]
   ]
 )
 
@@ -20,28 +20,29 @@
 #line(length: 100%, stroke: 1pt)
 
 #align(center)[
-  #text(weight: "bold", size: 1.5em)[Fiche d'Activité : Rapport ST50 et Generic Ingestion]
+  #text(weight: "bold", size: 1.5em)[Fiche d'Activité : Dockerisation du PoC]
 ]
 
 = Travaux réalisés
 
-== Création du rapport de stage
-- Début du rapport de stage : structuration, rédaction de l'introduction et du remerciement.
-- Rédaction de la section "Présentation de l'entreprise Magellium" : description de l'entreprise, de son positionnement stratégique et de l'agence de Ramonville-Saint-Agne.
-== Generic Ingestion
-- Conception et développement d'un module d'ingestion générique en vue d'un workshop technique présentant le fonctionnement du PoC.
-- Actuellement 3 types de fichiers supportés : .java, .py et .txt.
-- Le module est conçu pour être facilement extensible à d'autres formats de fichiers à l'avenir.
+== Création de Dockerfiles pour Ingestion, MCP, LangGraph et chainlit
+- Création de Dockerfiles pour chaque composant du PoC afin de faciliter le déploiement et l'exécution dans des environnements isolés.
+== Création de Docker Compose pour orchestrer les conteneurs
+- Mise en place d'un fichier Docker Compose pour orchestrer les conteneurs et simplifier le processus de démarrage et d'arrêt des services.
+== Tests et validation des conteneurs
+- Tests de bon fonctionnement des conteneurs et validation de leur interopérabilité.
 = Bilan et prochaines étapes
 
 *Ce que j'ai fais* :
-- Rédaction de la première partie du rapport de stage
-- Conception et développement du module d'ingestion générique pour le workshop technique
+- Création de Dockerfiles pour Ingestion, MCP, LangGraph et chainlit
+- Création de Docker Compose pour orchestrer les conteneurs
+- Tests et validation des conteneurs
 
 *À venir* :
 - Rédaction de l'organigramme de l'entreprise et de la section sur les équipes techniques
 - Finalisation du rapport de stage avec les sections sur l'analyse du besoin, les choix d'architecture technique, les phases d'implémentation, les résultats obtenus et le bilan technique et personnel de cette expérience.
 - Poursuite du développement du module d'ingestion générique avec l'ajout de nouveaux formats de fichiers et l'amélioration de ses fonctionnalités en vue du workshop technique.
+- Refacto legère : load des tools en async afin de résoudre les conflits liés au MCP.
 
 #v(2em)
 #line(length: 100%, stroke: 0.5pt)
