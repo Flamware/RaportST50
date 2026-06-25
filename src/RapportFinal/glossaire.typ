@@ -1,18 +1,19 @@
 = Glossaire
+#linebreak()
+Ce glossaire a pour but de définir les termes techniques utilisés dans ce rapport. Il est destiné à aider les lecteurs à comprendre les concepts et les technologies abordés.
 
-Ce glossaire définit les termes techniques et méthodologiques utilisés dans ce rapport afin de faciliter la compréhension des architectures et technologies déployées.
-
-- *Agile* : Méthodologie de développement logiciel favorisant la collaboration, la flexibilité et l'adaptation continue aux changements tout au long du cycle de vie d'un projet.
-- *Agent autonome* : Système informatique doté de capacités décisionnelles, capable d'exécuter des tâches complexes de manière indépendante en utilisant des techniques d'IA.
-- *CI/CD (Continuous Integration / Continuous Deployment)* : Pratiques d'ingénierie logicielle visant à automatiser l'intégration, le test et le déploiement du code pour accélérer les cycles de livraison.
-- *DevOps* : Ensemble de pratiques combinant le développement (Dev) et les opérations (Ops) pour améliorer la collaboration, l'automatisation et la stabilité des infrastructures.
-- *Full-stack* : Compétence couvrant l'ensemble des couches d'une application, de l'interface utilisateur (front-end) à la logique métier et aux bases de données (back-end).
-- *GCP (Google Cloud Platform)* : Suite de services de cloud computing offerte par Google, utilisée pour l'hébergement, la conteneurisation et l'orchestration des services (Kubernetes).
-- *LangGraph* : Framework d'orchestration conçu pour créer des applications basées sur des agents, permettant de définir des workflows complexes et cycliques entre des LLM.
-- *LLM (Large Language Model)* : Modèle de langage entraîné sur de larges volumes de données, capable de comprendre, d'analyser et de générer du texte de manière contextuelle.
-- *MCP (Model Context Protocol)* : Protocole standardisé permettant de structurer les interactions entre un modèle d'IA et ses outils externes, garantissant une transmission de contexte cohérente.
-- *Orchestration d'IA* : Coordination dynamique de plusieurs modèles, agents et sources de données pour résoudre des problématiques complexes dépassant les capacités d'un simple prompt.
-- *Pipeline de données* : Processus automatisé permettant la collecte, le filtrage, la transformation et le stockage de données brutes pour les rendre exploitables par des modèles d'IA ou des analyses métier.
-- *RAG (Retrieval-Augmented Generation)* : Technique d'IA combinant la génération de texte avec une étape de recherche d'informations dans des documents sources externes pour enrichir la précision et la pertinence des réponses.
-- *Scalabilité* : Capacité d'un système à gérer une augmentation de la charge de travail ou à s'étendre pour accueillir un nombre croissant d'utilisateurs ou de données.
-- *Smoke Tests* : Tests de "fumée" visant à vérifier rapidement la stabilité et le bon fonctionnement des fonctionnalités critiques d'un service après chaque build.
+- *Full-stack* : Se réfère à la capacité de travailler sur l'ensemble des couches d'une application, du front-end (interface utilisateur) au back-end (logique métier et base de données).
+- *DevOps* : Un ensemble de pratiques qui combine le développement logiciel (Dev) et les opérations informatiques (Ops) pour améliorer la collaboration, l'automatisation et la livraison continue des applications.
+- *Orchestration d'intelligence artificielle* : La coordination et la gestion de différentes composantes d'une solution d'intelligence artificielle, telles que les modèles, les données et les processus, pour atteindre des objectifs spécifiques.
+- *Agents autonomes* : Des systèmes informatiques capables de prendre des décisions et d'agir de manière indépendante pour accomplir des tâches spécifiques, souvent en utilisant des techniques d'intelligence artificielle.
+- *Scalabilité* : La capacité d'un système à gérer une augmentation de la charge de travail ou à être facilement étendu pour accueillir plus d'utilisateurs ou de données.
+- *Automatisation* : L'utilisation de technologies pour effectuer des tâches sans intervention humaine, souvent pour améliorer l'efficacité et réduire les erreurs.
+- *Architecture logicielle* : La structure organisationnelle d'un système logiciel, définissant les composants, leurs interactions et les principes de conception qui guident le développement.
+- *Agile* : Une méthodologie de développement logiciel qui privilégie la collaboration, la flexibilité et l'adaptation aux changements tout au long du projet.
+- *Rigueur* : La qualité d'être précis, méthodique et attentif aux détails dans l'exécution d'une tâche ou d'un projet.
+- *Autonomie* : La capacité de travailler de manière indépendante, en prenant des décisions et en gérant son propre temps et ses ressources pour atteindre des objectifs définis.
+- *Force de proposition* : La capacité à suggérer des idées, des solutions ou des améliorations de manière proactive pour contribuer au succès d'un projet ou d'une organisation.
+- *RAG (Retrieval-Augmented Generation)* : Une technique d'intelligence artificielle qui combine la génération de texte avec la récupération d'informations à partir de sources externes pour produire des réponses plus précises et informées.
+- *LLM (Large Language Model)* : Un modèle de langage de grande taille, souvent basé sur des architectures de réseaux de neurones, capable de comprendre et de générer du texte de manière cohérente et contextuelle.
+- *Pipelines de données** : Un ensemble de processus automatisés qui permettent de collecter, transformer et stocker des données pour les rendre utilisables dans des applications ou des analyses.
+- **MCP (Model-Context-Protocol)** : Un protocole de communication entre un modèle d'intelligence artificielle, et des outils mis à sa disposition, permettant de structurer les interactions et les échanges d'informations de manière efficace.

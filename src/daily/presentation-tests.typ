@@ -1,7 +1,7 @@
 #set page(paper: "a4", margin: (x: 2cm, y: 2.5cm))
 #set text(font: "Linux Libertine", size: 11pt, lang: "fr")
 #set heading(numbering: "1.")
-
+x
 // --- En-tête Institutionnel ---
 #grid(
   columns: (1fr, 1fr),
