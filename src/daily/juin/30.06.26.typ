@@ -31,6 +31,8 @@
 == Ajout de LangFuse
 - Intégration de LangFuse pour le suivi des performances et la traçabilité des interactions avec les modèles d'IA. A terme, Langfuse permettre de ne plus passer via Langsmith Studio. (Indépendance)
 
+==Tweak Ingestion & MCP
+- Armonisaton des chemins d'accès ingerés pour l'Ingestion et le MCP, afin de simplifier la configuration et l'utilisation du PoC. Permet aussi une meilleur lisibilité pour les agents de LangGraph. Meilleure utilisation des outils. (regex, read_file, etc.)
 = Bilan et prochaines étapes
 
 *Ce que j'ai fais* :
@@ -39,6 +41,8 @@
 *À venir* :
 - Solver soucis des venv python pour les differentes parties du PoC (MCP, Graph, Ingestion et Admin).
 - Amélioration de l'interface Streamlit pour une meilleure expérience utilisateur et ajout de fonctionnalités supplémentaires pour la configuration du PoC.
+- Dans l'interface admin :
+ - Ajouter la possibilité de configurer le chemin d'acces du MCP. (pour le regex et read_file)
 
 #v(2em)
 #line(length: 100%, stroke: 0.5pt)

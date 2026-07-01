@@ -2,7 +2,7 @@ const cliProgress = require('cli-progress');
 
 const hourlySalary = 5.9;
 const today = new Date();
-const monthIndex = today.getMonth(); // 0-11
+const monthIndex = today.getMonth();
 const currentYear = today.getFullYear();
 
 // Get number of days in current month
