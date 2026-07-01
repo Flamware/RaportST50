@@ -31,12 +31,21 @@
 #pagebreak()
 #include "remerciement.typ"
 #pagebreak()
-#include "table_des_matières.typ"
-#pagebreak()
-#set heading(numbering: "1.1.")
 #include "glossaire.typ"
 #pagebreak()
+#include "table_des_matières.typ"
+#pagebreak()
+
+#set heading(numbering: "1.1.")
+
 #include "presentation.typ"
 #pagebreak()
 #include "equipe.typ"
 #pagebreak()
+#include "travail_realise.typ"
+#pagebreak()
+#include "synthese.typ"
+#pagebreak()
+#include "conclusion.typ"
+#pagebreak()
+#include "annexes.typ"
