@@ -6,7 +6,7 @@ const monthIndex = today.getMonth();
 const currentYear = today.getFullYear();
 
 // Get number of days in current month
-const numberOfDaysInMonth = new Date(currentYear, monthIndex + 1, 0).getDate();
+const numberOfDaysInMonth = new Date(currentYear, monthIndex , 0).getDate();
 
 // Jours fériés 2026
 const holidays2026 = [
@@ -21,6 +21,12 @@ const holidays2026 = [
     new Date(2026, 4, 15).getTime(), // Pont de l'Ascension
     new Date(2026, 4, 29).getTime(), // Moto
     new Date(2026, 6, 14).getTime(), // Fête Nationale
+    new Date(2026, 7, 27).getTime(), // Fin contrat
+    new Date(2026, 7, 28).getTime(), // Fin contrat
+    new Date(2026, 7, 29).getTime(), // Fin contrat
+    new Date(2026, 7, 30).getTime(), // Fin contrat
+    new Date(2026, 7, 31).getTime(), // Fin contrat
+
 ];
 
 // Get the number of working days in a date range
