@@ -1,0 +1,29 @@
+@startuml
+!theme plain
+skinparam backgroundColor transparent
+
+' Styles simplifiés
+skinparam node {
+    BackgroundColor #F8F9FA
+    BorderColor #6C757D
+}
+
+rectangle "Frontend (Utilisateur)" as Front #E3F2FD
+cloud "API Backend (fs-core)" as Back
+
+node "Validation (Smoke Tests Bruno)" {
+    [Gestion des Parcelles (Dossier 03)] as D3 #FFF9C4
+}
+
+' Relations
+Front -> Back : "A besoin de ces fonctionnalités"
+D3 -> Back : "Vérifie la conformité de ces fonctionnalités"
+
+note bottom of D3
+  **Lien métier :**
+  Les tests Bruno valident que les fonctionnalités
+  utilisées par le Frontend répondent
+  toujours comme attendu.
+end note
+
+@enduml

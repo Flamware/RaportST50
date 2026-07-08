@@ -1,0 +1,33 @@
+@startuml
+!theme plain
+skinparam backgroundColor transparent
+package "APRÈS : Architecture Mutualisée" {
+
+node "Contexte Spring (2000+ beans)" as Context {
+    [AbstractIntegrationTest]
+}
+
+package "Classes de Tests" {
+    [Test A] as T1
+    [Test B] as T2
+    [Test C] as T3
+}
+
+T1 --> Context : Hérite
+T2 --> Context : Hérite
+T3 --> Context : Hérite
+
+note right of Context
+  **Architecture Mutualisée**
+  • Chargé 1 seule fois
+  • 99.5% Cache Hit Rate
+  • Temps : 3 minutes total
+end note
+
+note bottom of "Classes de Tests"
+  **Règle d'or :**
+  Interdiction de modifier
+  la configuration du contexte !
+end note
+
+@enduml

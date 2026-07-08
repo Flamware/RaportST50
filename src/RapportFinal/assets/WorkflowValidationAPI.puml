@@ -1,0 +1,28 @@
+@startuml
+!theme plain
+skinparam backgroundColor transparent
+
+' Styles pour rendre le schéma convivial
+skinparam rectangle {
+    RoundCorner 20
+    BackgroundColor #E3F2FD
+    BorderColor #2196F3
+}
+
+rectangle "1. Lancement automatique\n(Système)" as Step1
+rectangle "2. Création de données uniques\n(Dates & codes aléatoires)" as Step2
+rectangle "3. Vérification du système\n(Réponse attendue)" as Step3
+rectangle "4. Rapport de santé\n(Succès ou Alerte)" as Step4
+
+Step1 --> Step2 : Génère
+Step2 --> Step3 : Envoie la requête
+Step3 --> Step4 : Analyse le résultat
+
+note bottom of Step2
+  Chaque test est unique.
+  Même en cas de réexécution,
+  les données générées
+   sont différentes.
+end note
+
+@enduml

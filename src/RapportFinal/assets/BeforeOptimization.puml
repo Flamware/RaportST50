@@ -1,0 +1,20 @@
+@startuml
+!theme plain
+skinparam backgroundColor transparent
+
+' --- AVANT ---
+package "AVANT : Architecture Fragmentée" {
+    node "Contexte A" as C1
+    node "Contexte B" as C2
+    node "Contexte C" as C3
+    [Test 1] --> C1
+    [Test 2] --> C2
+    [Test 3] --> C3
+    note right of C3
+      ⌛ 45s /test
+      (Répétition coûteuse)
+    end note
+}
+
+
+@enduml

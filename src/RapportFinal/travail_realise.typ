@@ -33,6 +33,49 @@ Suite à ce diagnostic précis, les objectifs de cette première phase de missio
 *3. Sécurisation "Shift-Left" et Standardisation*
 - Déplacer la vérification de la qualité et de la sécurité du code au plus près du développeur, en interceptant les anomalies avant même le déclenchement de la CI.
 - Rédiger un référentiel technique documentant ces nouvelles normes afin de standardiser l'écriture des tests au sein de l'équipe et de prévenir l'accumulation future de dette technique.
-== Axe 1: Refonte de la stratégie de tests et optimisation CI/CD
+== Axe 1 : Refonte de la stratégie de tests et optimisation CI/CD
+
+Pour répondre aux objectifs fixés, la refonte s'est articulée autour de trois chantiers techniques majeurs, allant du cœur du backend jusqu'à la chaîne d'intégration continue.
+
+=== Centralisation et optimisation du contexte Spring Boot
+Le premier défi consistait à endiguer la "fuite de contexte" identifiée lors de l'audit. J'ai conçu et mis en place une classe mère globale, `AbstractIntegrationTest`, dont héritent désormais toutes les classes de test. Cette architecture a permis de mutualiser les configurations complexes (`@MockBean`, `@SpyBean`) et d'éliminer les annotations destructrices de cache, telles que `@DirtiesContext`.
+
+Parallèlement, la gestion de la sécurité asynchrone levait fréquemment des exceptions (`AccessDeniedException`). J'ai développé un utilitaire centralisé (`SecurityTestUtils`) pour forcer l'injection de contextes de sécurité fiables et liés à la base de données de test, remplaçant ainsi les annotations magiques devenues instables.
+
+*Résultat :* Le temps de build local est passé de 17 minutes à 3 minutes, avec un taux d'utilisation du cache (*Cache Hit Rate*) stabilisé à 99,5%. Sur la CI GitLab, le temps d'exécution a été réduit de 70%, passant de 19:18 à 5:45.
+
+#figure(
+    image("assets/BeforeOptimization.png", width: 100%),
+    caption: [Avant Optimisation : Chaque classe de test réinitialise le contexte Spring Boot, entraînant des pénalités de performance.]
+) <fig:integration_test_legacy>
+
+#figure(
+  image("assets/AbstractIntegrationTest.png", width: 100%),
+  caption: [Après Optimisation : Mutualisation du contexte Spring Boot pour tous les tests d'intégration.]
+) <fig:integration_test_optimized>
+
+=== Externalisation des contrats d'API avec Bruno
+Pour désengorger les tests d'intégration Spring, j'ai piloté la migration des tests de validation HTTP (`MockMvc`) vers le client d'API Bruno. Afin de rendre ces tests de bout en bout totalement autonomes et rejouables sans polluer la base de données de la CI, j'ai implémenté une stratégie de génération d'IDs dynamiques via des scripts JavaScript pré-requêtes (génération de timestamps et UUIDv4). Enfin, j'ai développé un script Bash sur-mesure pour intégrer nativement l'exécution dynamique de ces tests Bruno dans la pipeline GitLab CI
+
+#figure(
+  image("assets/WorkflowValidationAPI.png", width: 65%),
+  caption: [Workflow de validation des contrats d'API via Bruno]
+) <fig:bruno_workflow>
+
+#linebreak()
+
+J'ai créé une suite de smoke tests couvrant l'intégralité des routes API backend sollicitées par le frontend lors de son chargement.
+
+*Objectif* : Vérifier que chaque point d'entrée métier (Identité, Agronomie, Gestion de parcelles) répond aux attentes contractuelles du frontend. Ces tests agissent comme une sentinelle : ils permettent de détecter immédiatement si une modification backend "casse" la communication avec l'interface.
+
+#figure(
+  image("assets/BackEndSmokeTests.png", width: 100%),
+  caption: [Quand est-ce qu'il s'agit d'un smoke test ?]
+) <fig:backend_smoke_test>
+
+=== Fiabilisation Frontend et approche "Shift-Left"
+Sur la partie applicative frontend (Front Manager), l'infrastructure existante sous Cypress s'est révélée trop lourde. J'ai mené un benchmark technique qui a justifié la migration de la suite de tests vers Playwright. Cette transition a permis de diviser le temps d'exécution des Smoke Tests par trois (de 5m 28s à 1m 45s) et de réduire la charge processeur considérablement (de 1m 38s à 8,5s).
+
+Pour garantir la pérennité de ces optimisations, j'ai mis en place une stratégie "Shift-Left" via des hooks Git. J'ai configuré des scripts `pre-commit` (exécutant Spotless, Checkstyle et SonarLint uniquement sur les fichiers modifiés) et `pre-push` (lançant les Smoke Tests impactés). Cela permet d'intercepter les régressions directement sur le poste du développeur, avant de solliciter la CI.
 == Axe 2: R&D et Implémentation d'une IA Agentique Autonome
 
