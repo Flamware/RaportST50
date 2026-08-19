@@ -1,4 +1,4 @@
-= Glossaire
+#text(fill: rgb("4a90e2"))[= Glossaire]
 #linebreak()
 Ce glossaire a pour but de définir les termes techniques utilisés dans ce rapport. Il est destiné à aider les lecteurs à comprendre les concepts et les technologies abordés.
 
@@ -32,10 +32,14 @@ Ce glossaire a pour but de définir les termes techniques utilisés dans ce rapp
 - *Graphe d'état (State Graph)* : Modèle d'orchestration représentant le flux d'exécution sous forme de nœuds (agents/fonctions) et de transitions conditionnelles articulés autour d'un état partagé immutable.
 - *Routage dynamique & Court-circuit* : Capacité d'un orchestrateur à adapter le chemin d'exécution en temps réel et à contourner des étapes superflues lorsque le contexte fourni est déjà suffisant.
 - *Sorties structurées (Structured Outputs)* : Mécanisme (via Pydantic ou Instructor) contraignant le LLM à formater sa réponse selon un schéma typé et déterministe, directement validable par le code appelant.
+- *Non-déterminisme (IA générative)* : Caractéristique d'un modèle de langage à produire des réponses différentes pour une même entrée, d'une exécution à l'autre. Ce comportement impose des stratégies de test spécifiques, différentes de celles utilisées pour un logiciel classique.
+- *Invariant structurel* : Dans le contexte de la validation d'un système à base de LLM, propriété vérifiable indépendamment du contenu exact généré (ex. conformité d'un schéma de sortie, présence des champs attendus). Permet de tester un composant non déterministe sans dépendre d'une réponse figée à l'avance.
 - *Observabilité & Traçabilité LLM* : Analyse fine et enregistrement des métriques d'exécution d'un système agentique (latence, consommation de tokens, étapes intermédiaires, appels d'outils via LangFuse).
 - *LangGraph* : Framework d'orchestration permettant de modéliser des systèmes multi-agents cycliques et orientés graphe d'état.
 - *FastMCP* : Bibliothèque Python permettant d'implémenter rapidement des serveurs d'outils conformes à la spécification MCP.
 - *LangFuse* : Plateforme open-source dédiée au traçage, à l'évaluation et au monitoring des applications basées sur des LLM.
+- *Qdrant* : Base de données vectorielle open-source utilisée pour stocker les embeddings et effectuer la recherche sémantique (RAG) du projet.
+- *Instructor* : Bibliothèque Python s'appuyant sur Pydantic pour contraindre et valider les sorties d'un LLM, avec gestion automatique des unions de schémas et retry en cas d'erreur de formatage.
 - *Tree-sitter* : Générateur de parseurs syntaxiques incrémentaux produisant un arbre de syntaxe abstraite (AST) pour l'analyse structurelle du code source.
 - *Playwright & Cypress* : Frameworks modernes d'automatisation de tests End-to-End et d'interfaces web.
 - *Bruno* : Client d'API léger et scriptable facilitant l'externalisation et l'automatisation des tests de contrats d'interfaces HTTP.

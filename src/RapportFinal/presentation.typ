@@ -1,7 +1,9 @@
-= Présentation
+#text(fill: rgb("4a90e2"))[= Présentation]
 == L'entreprise Magellium
 
 Magellium, membre fondateur du _Magellium Artal Group_, est une entreprise de taille intermédiaire (ETI) spécialisée dans le développement de solutions technologiques de pointe. Ses cœurs de métier s'articulent principalement autour de la géographie numérique, du traitement d'images et de l'ingénierie logicielle avancée. Fondée en 2003 à Toulouse, Magellium a su développer une expertise unique qui la positionne aujourd'hui comme un acteur incontournable auprès des grands donneurs d'ordres des secteurs du Spatial, de la Défense, de la Sécurité, de l'Énergie et de l'Environnement.
+
+Le groupe Magellium Artal est né en 2016 du rapprochement entre Magellium et le groupe toulousain Artal Technologies, formant un ensemble d'environ 280 collaborateurs pour un chiffre d'affaires proche de 30 M€. #footnote[Le Journal des Entreprises, "Le groupe Artal reprend Magellium" (2016) et "Magellium Artal fait évoluer son capital pour devenir un leader européen" (2025), lejournaldesentreprises.com.] Le groupe intègre également une filiale internationale, ISONEO, basée au Canada, et participe à des programmes spatiaux internationaux tels que le projet DIANE aux côtés de Thales Alenia Space. En 2025, l'entrée au capital du fonds Eiréné de Weinberg Capital Partners a été présentée par la direction comme une étape pour positionner le groupe parmi les leaders européens de son marché.
 
 Le groupe compte aujourd'hui plus de 250 collaborateurs répartis sur plusieurs pôles stratégiques en France, notamment à La Garenne-Colombes (région parisienne), Nantes et Ramonville-Saint-Agne (près de Toulouse). C'est au sein de cette agence toulousaine, implantée au cœur de l'écosystème aéronautique et spatial du Sud-Ouest, que s'est déroulé ce stage de fin d'études.
 

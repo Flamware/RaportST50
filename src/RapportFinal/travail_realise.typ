@@ -13,7 +13,7 @@ Lors de mes premières semaines de prise en main du projet, trois problématique
 
 - *Lenteur prononcée de l'Intégration Continue (CI) :* Le temps d'exécution des tests du module principal s'avérait particulièrement long, s'étalant de 17 à 20 minutes en local, et atteignant jusqu'à 40 minutes sur les pipelines GitLab CI.
 - *Complexité et effet "boîte noire" :* Les tests d'intégration backend étaient utilisés de manière indifférenciée, à la fois pour valider la logique métier complexe et pour vérifier de simples contrats d'API (tests End-to-End). Cette confusion des périmètres rendait la suite de tests verbeuse, et il était difficile de distinguer les tests réellement critiques des tests de "surface".
-- *Fragilité de la suite de tests du backend :* Il n'existait pas de stratégie de tests du fumée (*smoke tests*) pour les routes backend empruntés par le frontend. Ainsi, une modification du backend pouvait passer inaperçue si elle n'était pas couverte par un test d'intégration, exposant le projet à des risques de régressions non détectées lors des mises en production.
+- *Fragilité de la suite de tests du backend :* Il n'existait pas de stratégie de tests de fumée (*smoke tests*) pour les routes backend empruntés par le frontend. Ainsi, une modification du backend pouvait passer inaperçue si elle n'était pas couverte par un test d'intégration, exposant le projet à des risques de régressions non détectées lors des mises en production.
 - *Fragilité de l'environnement frontend :* Les tests de fumée (*smoke tests*) permettant de valider l'état de des routes utilisés côté frontend après déploiement étaient inexistants, exposant le projet à des risques de régressions non détectées lors des mises en production.
 
 === Phase d'audit et analyse des goulots d'étranglement
@@ -61,7 +61,7 @@ Parallèlement, la gestion de la sécurité asynchrone levait fréquemment des e
 ) <fig:integration_test_optimized>
 
 === Externalisation des contrats d'API avec Bruno
-Pour désengorger les tests d'intégration Spring, j'ai migré des tests de validation HTTP ("MockMvc") vers le client d'API Bruno. Afin de rendre ces tests de bout en bout autonomes et rejouables sans polluer la base de données de la CI, une génération d'IDs dynamiques via des scripts JavaScript pré-requêtes est utilisée (génération de timestamps et UUID). Enfin, j'ai mis à jour le script Bash d'éxécution des tests bruno sur la CI, afin qu'il run cette nouvelle suite de tests.
+Pour désengorger les tests d'intégration Spring, j'ai migré des tests de validation HTTP ("MockMvc") vers le client d'API Bruno. Afin de rendre ces tests de bout en bout autonomes et rejouables sans polluer la base de données de la CI, une génération d'IDs dynamiques via des scripts JavaScript pré-requêtes est utilisée (génération de timestamps et UUID). Enfin, j'ai mis à jour le script Bash d'exécution des tests Bruno sur la CI, afin qu'il exécute cette nouvelle suite de tests.
 
 #figure(
   image("assets/WorkflowValidationAPI.png", width: 65%),
@@ -86,7 +86,7 @@ Côté frontend, j'ai mis en place une suite de tests de fumée (*Smoke Tests*) 
  Une fois le choix de Playwright validé, j'ai réécrit les tests de fumée pour qu'ils soient plus rapides et plus fiables.
  En cours de développement, il s'est avéré que la dépendances de ces tests au lancement du backend ralentissait considérablement le cycle de la CI. Ainsi, j'ai mis en place un mock du backend pour isoler les tests frontend et réduire le temps d'exécution. Cette approche a permis de diviser le temps d'exécution des Smoke Tests par trois (de 5m 28s à 1m 45s).
  === Benchmark Technique : Cypress vs Playwright
- Pour valider l'architecture de tests de fumée frontend du frontend", une étude comparative (*en annexe*) a été menée sur une suite représentative de 18 parcours utilisateurs critiques (Identity, Agronomy, Parcel Management, Monitoring).
+ Pour valider l'architecture de tests de fumée du frontend, une étude comparative (*en annexe*) a été menée sur une suite représentative de 18 parcours utilisateurs critiques (Identity, Agronomy, Parcel Management, Monitoring).
 
 
 
@@ -95,7 +95,7 @@ Côté frontend, j'ai mis en place une suite de tests de fumée (*Smoke Tests*) 
 === Stratégie "Shift-Left"
 Pour garantir la pérennité de ces optimisations, j'ai mis en place une stratégie "Shift-Left" via des hooks Git. J'ai configuré des scripts "pre-commit" (exécutant Spotless, Checkstyle et SonarLint uniquement sur les fichiers modifiés) et "pre-push" (lançant les Smoke Tests impactés). Cela permet d'intercepter les régressions directement sur le poste du développeur, avant de solliciter la CI.
 
-== Axe Transverse : Industrialisation et Pattern SafeHydrator
+== Axe Transverse : Industrialisation et Pattern GenericHydrator
 En parallèle des chantiers de CI et d'IA, un travail d'architecture logicielle a été mené sur le backend Java (`fs-core`) pour simplifier les services métier complexes (tels que `StrategyService`).
 
 === Conception du GenericHydrator
@@ -113,7 +113,7 @@ Pour valider ce composant sans dupliquer de code de test, j'ai mis en place une 
   [*Période*], [*Planning Prévisionnel*], [*Réalisation Réelle*],
   [Février 2026], [Prise en main fs-core & audit des builds], [Refactoring `AbstractIntegrationTest` & profilage Spring],
   [Mars 2026], [Migration des tests API & CI], [Portage Bruno, Playwright Frontend & Hooks Git],
-  [Avril 2026], [R&D IA & FastMCP], [Setup Open WebUI, FastMCP & Pattern `SafeHydrator`],
+  [Avril 2026], [R&D IA & FastMCP], [Setup Open WebUI, FastMCP & Pattern `GenericHydrator`],
   [Mai 2026], [Orchestration LangGraph], [Migration Multi-agents POO & Subgraphs],
   [Juin - Juillet 2026], [Industrialisation PoC & Rédaction], [Module Ingestion générique, Dockerisation & Rapport ST50]
 )

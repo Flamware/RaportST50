@@ -7,7 +7,7 @@ Le département CNAPPS (Cloud, Network, Architecture, Performance, Security & So
 L'équipe au sein de laquelle j'ai évolué est structurée de manière à favoriser la collaboration et l'efficacité opérationnelle. Elle est composée de plusieurs membres aux compétences complémentaires, répartis selon les rôles suivants :
 
 - *Chef de projet* : Responsable de la coordination globale, de la planification des tâches et de la communication avec les parties prenantes. Il joue un rôle clé dans la gestion des ressources et la prise de décision stratégique.
-- *Dévéloppeurs* : Chargés de la conception, du développement et de la maintenance des solutions logicielles. Ils travaillent en étroite collaboration pour assurer la cohérence et la qualité du code produit.
+- *Développeurs* : Chargés de la conception, du développement et de la maintenance des solutions logicielles. Ils travaillent en étroite collaboration pour assurer la cohérence et la qualité du code produit.
 
 Afin de coordonner les efforts et de garantir une progression fluide, des réunions quotidiennes (Daily Scrum) sont organisées. Ces échanges permettent de synchroniser l'avancement des tâches, d'identifier les obstacles et de réaligner les objectifs. Par ailleurs, des outils de gestion de projet comme Jira sont utilisés pour le suivi des tickets, l'assignation des responsabilités et la transparence de l'information.
 

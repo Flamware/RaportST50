@@ -1,4 +1,4 @@
-= Remerciement
+/s#text(fill: rgb("4a90e2"))[= Remerciement]
 #linebreak()
 #h(1cm)Je tiens à exprimer ma profonde gratitude à toute l'équipe de Magellium pour leur accueil bienveillant. Dès le premier jour, j'ai été intégré au sein d'une équipe dynamique et compétente, qui m'a offert un environnement de travail stimulant et propice à l'apprentissage. Je remercie particulièrement mon tuteur de stage, Mathieu Niord, pour son encadrement attentif, ses conseils avisés et sa disponibilité tout au long de ce stage. Sa guidance m'a permis de progresser rapidement et de surmonter les défis techniques rencontrés. Je suis également reconnaissant envers mes collègues pour leur soutien, leur collaboration et les échanges enrichissants qui ont jalonné cette expérience.
 

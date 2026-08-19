@@ -1,4 +1,4 @@
-= Introduction
+#text(fill: rgb("4a90e2"))[= Introduction]
 #linebreak()
 #h(1cm)Dans le cadre de ma dernière année du cursus d'ingénieur en informatique à l'Université de Technologie de Belfort-Montbéliard (UTBM), j'ai réalisé un stage de fin d'études en immersion professionnelle, ce qui constitue une étape charnière. Ce projet de fin d'études, d'une durée de six mois, m'a offert l'opportunité d'appliquer et de consolider mes compétences techniques et méthodologiques au sein d'un environnement industriel exigeant. C'est dans cette dynamique de transition vers la vie active que s'est inscrit ce stage, que j'ai effectué du 9 février au 24 juillet 2026 au sein de la société Magellium.
 
