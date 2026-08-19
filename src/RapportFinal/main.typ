@@ -7,7 +7,7 @@
 )
 #set text(
   font: "Liberation Sans",
-  size: 13pt,
+  size: 14pt,
   lang: "fr"
 )
 #image("Couverture type rapport UTBM_P20XX.pdf", width: 100%, height: 100%)
@@ -43,6 +43,8 @@
 #include "equipe.typ"
 #pagebreak()
 #include "travail_realise.typ"
+#pagebreak()
+#include "travail_realise_ia.typ"
 #pagebreak()
 #include "synthese.typ"
 #pagebreak()

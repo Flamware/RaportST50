@@ -16,4 +16,12 @@ L'offre de Magellium s'organise et se déploie autour de quatre grands domaines 
 
 == L'agence de Ramonville-Saint-Agne
 
-== Positionnement stratégique
+L'agence de Ramonville-Saint-Agne regroupe 200 et 249 collaborateurs et constitue le principal
+site toulousain de Magellium, aux côtés des implantations de La Garenne-Colombes et de
+Nantes. Elle héberge notamment les équipes travaillant sur des projets pour Airbus
+Defense and Space, dans le domaine de l'observation de la Terre et des applications
+agricoles, ainsi que des activités de développement logiciel et d'intégration
+d'intelligence artificielle.
+
+C'est au sein de cette agence, et plus précisément de l'équipe *CNAPPS* pour le projet *Farmstar*,
+que s'est déroulé ce stage, portant sur l'optimisation logiciel et la recherche de solution innovante en matière de processus de developpement.

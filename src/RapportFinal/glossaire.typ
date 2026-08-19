@@ -4,16 +4,38 @@ Ce glossaire a pour but de définir les termes techniques utilisés dans ce rapp
 
 - *Full-stack* : Se réfère à la capacité de travailler sur l'ensemble des couches d'une application, du front-end (interface utilisateur) au back-end (logique métier et base de données).
 - *DevOps* : Un ensemble de pratiques qui combine le développement logiciel (Dev) et les opérations informatiques (Ops) pour améliorer la collaboration, l'automatisation et la livraison continue des applications.
+- *CI/CD (Continuous Integration / Continuous Delivery)* : Ensemble de pratiques et de pipelines automatisés permettant de valider, tester, packager et déployer continuellement les modifications logicielles.
+- *Shift-Left* : Stratégie consistant à déplacer les contrôles de qualité, de sécurité et d'exécution des tests au plus tôt dans le cycle de développement (dès le poste local du développeur).
+- *Smoke Tests (Tests de fumée)* : Suite minimale de tests rapides servant de sentinelle pour vérifier qu'un composant, un service ou une route critique fonctionne correctement après déploiement ou modification.
+- *Flaky Tests* : Tests instables dont le résultat alterne entre succès et échec d'une exécution à l'autre sans qu'aucune modification de code n'ait eu lieu.
+- *Git Hooks (pre-commit / pre-push)* : Scripts automatisés exécutés localement par Git avant la validation d'un commit ou d'un push pour garantir le respect des normes de qualité et de formatage.
+- *DTO (Data Transfer Object)* : Patron de conception (*design pattern*) servant à encapsuler et transférer des données typées entre différentes couches logicielles sans logique métier.
 - *Orchestration d'intelligence artificielle* : La coordination et la gestion de différentes composantes d'une solution d'intelligence artificielle, telles que les modèles, les données et les processus, pour atteindre des objectifs spécifiques.
 - *Agents autonomes* : Des systèmes informatiques capables de prendre des décisions et d'agir de manière indépendante pour accomplir des tâches spécifiques, souvent en utilisant des techniques d'intelligence artificielle.
 - *Scalabilité* : La capacité d'un système à gérer une augmentation de la charge de travail ou à être facilement étendu pour accueillir plus d'utilisateurs ou de données.
 - *Automatisation* : L'utilisation de technologies pour effectuer des tâches sans intervention humaine, souvent pour améliorer l'efficacité et réduire les erreurs.
 - *Architecture logicielle* : La structure organisationnelle d'un système logiciel, définissant les composants, leurs interactions et les principes de conception qui guident le développement.
 - *Agile* : Une méthodologie de développement logiciel qui privilégie la collaboration, la flexibilité et l'adaptation aux changements tout au long du projet.
-- *Rigueur* : La qualité d'être précis, méthodique et attentif aux détails dans l'exécution d'une tâche ou d'un projet.
-- *Autonomie* : La capacité de travailler de manière indépendante, en prenant des décisions et en gérant son propre temps et ses ressources pour atteindre des objectifs définis.
-- *Force de proposition* : La capacité à suggérer des idées, des solutions ou des améliorations de manière proactive pour contribuer au succès d'un projet ou d'une organisation.
+- *PoC (Proof of Concept)* : Réalisation expérimentale à échelle réduite destinée à valider la faisabilité technique et la pertinence d'une solution ou d'une architecture.
 - *RAG (Retrieval-Augmented Generation)* : Une technique d'intelligence artificielle qui combine la génération de texte avec la récupération d'informations à partir de sources externes pour produire des réponses plus précises et informées.
 - *LLM (Large Language Model)* : Un modèle de langage de grande taille, souvent basé sur des architectures de réseaux de neurones, capable de comprendre et de générer du texte de manière cohérente et contextuelle.
+- *Inférence* : Phase d'exécution au cours de laquelle un modèle de langage entraîné traite une invite (*prompt*) et génère une réponse.
+- *Token & Fenêtre de contexte* : Unité élémentaire de découpage textuel traitée par un LLM, et volume maximal d'informations qu'un modèle peut analyser simultanément en mémoire de travail.
 - *Pipelines de données* : Un ensemble de processus automatisés qui permettent de collecter, transformer et stocker des données pour les rendre utilisables dans des applications ou des analyses.
-- *MCP (Model-Context-Protocol)* : Un protocole de communication entre un modèle d'intelligence artificielle, et des outils mis à sa disposition, permettant de structurer les interactions et les échanges d'informations de manière efficace.
+- *MCP (Model-Context-Protocol)* : Un protocole standardisé de communication entre un modèle d'intelligence artificielle et des outils mis à sa disposition, permettant de structurer les interactions et les échanges d'informations de manière sécurisée.
+- *Context Engineering* : Ensemble de techniques visant à construire dynamiquement le contexte fourni à un modèle de langage plutôt qu'à lui transmettre l'intégralité des données disponibles. Il combine découpage sémantique du code, enrichissement par métadonnées, recherche hybride (dense et lexicale) et re-ranking afin de sélectionner les informations les plus pertinentes pour une tâche donnée.
+- *Embeddings (Plongements vectoriels)* : Représentations vectorielles numériques de fragments de texte capturant leur proximité sémantique dans un espace multidimensionnel.
+- *Recherche hybride & BM25* : Combinaison d'une recherche vectorielle dense (sémantique) et d'une recherche lexicale exacte (algorithme BM25), essentielle pour cibler avec précision des identifiants et symboles de code.
+- *Re-ranking* : Étape algorithmique intervenant après la recherche primaire pour réévaluer et réordonner les fragments récupérés selon leur pertinence vis-à-vis de la tâche cible.
+- *Skeletonization (Squelettisation)* : Technique de compression de contexte consistant à masquer le corps des méthodes de classes dépendantes pour n'en conserver que les signatures et types.
+- *Chain-of-Thought (CoT)* : Technique incitant le modèle de langage à expliciter les étapes de son raisonnement logique intermédiaire avant de formuler sa réponse finale.
+- *Graphe d'état (State Graph)* : Modèle d'orchestration représentant le flux d'exécution sous forme de nœuds (agents/fonctions) et de transitions conditionnelles articulés autour d'un état partagé immutable.
+- *Routage dynamique & Court-circuit* : Capacité d'un orchestrateur à adapter le chemin d'exécution en temps réel et à contourner des étapes superflues lorsque le contexte fourni est déjà suffisant.
+- *Sorties structurées (Structured Outputs)* : Mécanisme (via Pydantic ou Instructor) contraignant le LLM à formater sa réponse selon un schéma typé et déterministe, directement validable par le code appelant.
+- *Observabilité & Traçabilité LLM* : Analyse fine et enregistrement des métriques d'exécution d'un système agentique (latence, consommation de tokens, étapes intermédiaires, appels d'outils via LangFuse).
+- *LangGraph* : Framework d'orchestration permettant de modéliser des systèmes multi-agents cycliques et orientés graphe d'état.
+- *FastMCP* : Bibliothèque Python permettant d'implémenter rapidement des serveurs d'outils conformes à la spécification MCP.
+- *LangFuse* : Plateforme open-source dédiée au traçage, à l'évaluation et au monitoring des applications basées sur des LLM.
+- *Tree-sitter* : Générateur de parseurs syntaxiques incrémentaux produisant un arbre de syntaxe abstraite (AST) pour l'analyse structurelle du code source.
+- *Playwright & Cypress* : Frameworks modernes d'automatisation de tests End-to-End et d'interfaces web.
+- *Bruno* : Client d'API léger et scriptable facilitant l'externalisation et l'automatisation des tests de contrats d'interfaces HTTP.

@@ -28,8 +28,8 @@
 Le travail effectué a consisté à trouver des solutions pour tester la classe `GenericHydrator` de manière efficace, en créant des tests et en simulant les données d'entrée et de sortie.
 
 === Création d'une classe abstraite de test
-- **Objectif** : Créer une classe de test abstraite pour centraliser les types de test et les données d'entrée/sortie, afin de faciliter la création de tests d'intégration pour différentes classes utilisant le `GenericHydrator`.
-- **Approche** : J'ai créé une classe abstraite de test qui contient des méthodes génériques pour tester le `GenericHydrator`.
+- Objectif : Créer une classe de test abstraite pour centraliser les types de test et les données d'entrée/sortie, afin de faciliter la création de tests d'intégration pour différentes classes utilisant le `GenericHydrator`.
+- Approche : J'ai créé une classe abstraite de test qui contient des méthodes génériques pour tester le `GenericHydrator`.
 - **Résultat** : Cette classe abstraite de test permet de réutiliser les mêmes scénarios de test pour différentes classes, en fournissant des dtos et entities de test spécifiques à chaque classe. Un puml a été créé pour illustrer la structure de cette classe abstraite de test.
 
 === Création de tests d'intégration pour `StrategyHydrator`

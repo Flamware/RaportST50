@@ -22,7 +22,7 @@
 
 = Orchestration par Model Context Protocol (MCP)
 
-L'architecture RAG décrite précédemment permet de fournir des faits à l'IA. Cependant, pour transformer Gemma 4 en un véritable assistant opérationnel pour Farmstar, nous devons passer d'une consommation passive de données à une capacité d'action dynamique. C'est ici qu'intervient le **Model Context Protocol (MCP)**.
+L'architecture RAG décrite précédemment permet de fournir des faits à l'IA. Cependant, pour transformer Gemma 4 en un véritable assistant opérationnel pour Farmstar, nous devons passer d'une consommation passive de données à une capacité d'action dynamique. C'est ici qu'intervient le Model Context Protocol (MCP).
 
 == Concept Fondamental : Du RAG Statique à l'Agent Actif
 
@@ -34,7 +34,7 @@ Le MCP permet de standardiser la manière dont le modèle interagit avec des out
 ]
 
 #info-box(title: "Synergie RAG + MCP", color: success-color)[
-  Le RAG fournit la **connaissance** (recherche sémantique globale), tandis que le MCP fournit la **capacité d'action** (outils métier). Ensemble, ils permettent à Gemma 4 de ne plus seulement "répondre", mais de "résoudre".
+  Le RAG fournit la connaissance (recherche sémantique globale), tandis que le MCP fournit la capacité d'action (outils métier). Ensemble, ils permettent à Gemma 4 de ne plus seulement "répondre", mais de "résoudre".
 ]
 
 == Architecture de Déploiement
@@ -56,27 +56,27 @@ L'implémentation actuelle du serveur MCP Farmstar expose les outils suivants, o
 
 Ces outils permettent à l'IA de comprendre l'organisation générale du monorepo sans être submergée par des milliers de fichiers.
 
-- **`list_project_files()`** : Liste les fichiers clés du projet (Python, YAML, Markdown) pour orienter les recherches ultérieures.
-- **`list_project_structure(depth: int)`** : Fournit une arborescence simplifiée des dossiers jusqu'à une profondeur donnée, en excluant les répertoires non pertinents (.git, .venv, target, etc.).
-- **`list_files_in_directory(dir_path: str)`** : Liste le contenu d'un dossier spécifique, utile après localisation d'un module intéressant.
+- `list_project_files()` : Liste les fichiers clés du projet (Python, YAML, Markdown) pour orienter les recherches ultérieures.
+- `list_project_structure(depth: int)` : Fournit une arborescence simplifiée des dossiers jusqu'à une profondeur donnée, en excluant les répertoires non pertinents (.git, .venv, target, etc.).
+- *`list_files_in_directory(dir_path: str)`* : Liste le contenu d'un dossier spécifique, utile après localisation d'un module intéressant.
 
 === Outils d'Accès au Code (File Analysis Tools)
 
 Ces outils permettent à l'IA de consulter le code source en détail.
 
-- **`read_project_file(file_path: str)`** : Lit le contenu complet d'un fichier du monorepo avec vérification de sécurité (confinement à l'intérieur du répertoire root).
-- **`get_file_summary(file_path: str)`** : Fournit un résumé intelligent du contenu d'un fichier en utilisant le moteur RAG, utile pour les fichiers volumineux.
+- *`read_project_file(file_path: str)`* : Lit le contenu complet d'un fichier du monorepo avec vérification de sécurité (confinement à l'intérieur du répertoire root).
+- *`get_file_summary(file_path: str)`* : Fournit un résumé intelligent du contenu d'un fichier en utilisant le moteur RAG, utile pour les fichiers volumineux.
 
 === Outils de Recherche (Search Tools)
 
 Deux modes de recherche complémentaires pour localiser du code :
 
-- **`search_farmstar_code(query: str)`** : Recherche *sémantique* (conceptuelle) dans le codebase. À utiliser pour comprendre une logique métier globale quand on ne connaît pas le nom exact des fichiers (ex: "gestion de la biomasse", "flux de notification").
-- **`search_by_regex(pattern: str, file_extension: str)`** : Recherche *technique* (exacte) utilisant les expressions régulières. Pour trouver des correspondances précises (ex: `public class .*Controller`).
+- *`search_rag_code(query: str)`* : Recherche *sémantique* (conceptuelle) dans le codebase. À utiliser pour comprendre une logique métier globale quand on ne connaît pas le nom exact des fichiers (ex: "gestion de la biomasse", "flux de notification").
+- *`search_by_regex(pattern: str, file_extension: str)`* : Recherche *technique* (exacte) utilisant les expressions régulières. Pour trouver des correspondances précises (ex: `public class .*Controller`).
 
 === Outils de Partage de Connaissances (Skills)
 
-- **`list_and_read_skill(skill_name: str)`** : Liste et consulte les skills (fichiers Markdown) disponibles. Permet à l'IA de se référer à des guides ou des bonnes pratiques prédéfinis (ex: architecture, patterns de codage).
+- *`list_and_read_skill(skill_name: str)`* : Liste et consulte les skills (fichiers Markdown) disponibles. Permet à l'IA de se référer à des guides ou des bonnes pratiques prédéfinis (ex: architecture, patterns de codage).
 
 == Sécurité et Gouvernance
 
@@ -86,7 +86,7 @@ L'usage du MCP impose une gestion fine des droits d'accès. Un orchestrateur de 
 
 === Le Défi de l'Implémentation Actuelle
 
-L'implémentation actuelle via Open WebUI révèle une limite structurelle : les agents (Jira, Farmstar, Code) fonctionnent en **silos**. Un agent "Jira" ne peut pas transmettre de contexte directement à l'agent "Analyse de Code" sans intervention humaine.
+L'implémentation actuelle via Open WebUI révèle une limite structurelle : les agents (Jira, Farmstar, Code) fonctionnent en *silos*. Un agent "Jira" ne peut pas transmettre de contexte directement à l'agent "Analyse de Code" sans intervention humaine.
 
 Dans un workflow complexe (ex: "Résoudre le ticket FS-402"), l'IA doit :
 1. Lire le ticket (Agent Jira).
@@ -97,11 +97,11 @@ Actuellement, l'utilisateur doit effectuer manuellement le "copier-coller" du co
 
 === Solution : Orchestration par Graphe d'État (LangGraph)
 
-Pour que le model devienne un véritable assistant autonome, nous devons déporter la logique d'orchestration de l'interface (Open WebUI) vers une **couche de logique métier (Middleware)**.
+Pour que le model devienne un véritable assistant autonome, nous devons déporter la logique d'orchestration de l'interface (Open WebUI) vers une *couche de logique métier (Middleware)*.
 
 #term[
   *Orchestration par Graphe d'État* \
-  L'utilisation de frameworks comme **LangGraph** permet de définir un "Cerveau Central" (Supervisor) qui :
+  L'utilisation de frameworks comme *LangGraph* permet de définir un "Cerveau Central" (Supervisor) qui :
   - Détient l'état global de la tâche (State).
   - Appelle dynamiquement les outils MCP nécessaires.
   - Oriente le flux de travail entre les différents "nœuds" de compétences sans perte de contexte.
@@ -111,9 +111,9 @@ Pour que le model devienne un véritable assistant autonome, nous devons déport
 
 L'architecture cible pour Farmstar repose sur la synergie de trois composantes :
 
-- **RAG :** La mémoire sémantique (Connaissance globale et recherche contextuelle).
-- **MCP :** Le bras opérationnel (Capacité d'action sur les outils métier Farmstar).
-- **LangGraph :** Le chef d'orchestre (Planification, coordination et état global des tâches).
+- *RAG :* La mémoire sémantique (Connaissance globale et recherche contextuelle).
+- *MCP :* Le bras opérationnel (Capacité d'action sur les outils métier Farmstar).
+- *LangGraph :* Le chef d'orchestre (Planification, coordination et état global des tâches).
 
 = Le Concept de Context Engineering
 
@@ -123,8 +123,8 @@ Le Context Engineering est l'ensemble des techniques permettant de transformer u
 
 #callout(title: "Pourquoi est-ce indispensable pour Farmstar ?", color: accent-color)[
   Le projet Farmstar dépasse la capacité de mémoire immédiate de Gemma 4. Sans ingénierie, l'IA souffre de deux maux majeurs :
-  - **Saturation :** Trop d'informations inutiles (bruit) masquent les informations vitales.
-  - **Dilution (Lost in the Middle) :** Plus le contexte est long, plus le modèle a du mal à faire des liens précis entre des éléments éloignés.
+  - *Saturation :* Trop d'informations inutiles (bruit) masquent les informations vitales.
+  - *Dilution (Lost in the Middle) :* Plus le contexte est long, plus le modèle a du mal à faire des liens précis entre des éléments éloignés.
 ]
 
 == Les Stratégies d'Optimisation du Contexte
@@ -133,7 +133,7 @@ Le défi pour Farmstar n'est pas seulement de trouver l'information, mais de la 
 
 === Le "Chunking" Sémantique (Segmentation Logique)
 Au lieu d'un découpage arbitraire par nombre de caractères, le RAG utilise une segmentation basée sur la structure du code.
-- **Principe :** Utilisation de parseurs (ex: Tree-sitter) pour isoler des unités logiques complètes.
+- *Principe :* Utilisation de parseurs (ex: Tree-sitter) pour isoler des unités logiques complètes.
 
 #term[
   *Exemple :* Plutôt que de couper le fichier `BiomasseService.java` tous les 1000 caractères, le RAG extrait la méthode `public double calculerIndiceVegetation(...)` dans son intégralité, du début de la signature jusqu'à l'accolade fermante.
@@ -141,7 +141,7 @@ Au lieu d'un découpage arbitraire par nombre de caractères, le RAG utilise une
 
 === L'Enrichissement par Métadonnées (Metadata Injection)
 Chaque fragment récupéré par le RAG est "augmenté" par un préfixe textuel avant d'être soumis à l'IA.
-- **Principe :** On injecte des informations de contexte global (chemin, branche, module) en haut du fragment.
+- *Principe :* On injecte des informations de contexte global (chemin, branche, module) en haut du fragment.
 
 #term[
   *Exemple de préfixe injecté :* \
@@ -181,7 +181,7 @@ L'utilité : Il permet de classer les résultats du plus pertinent au moins pert
 
 === La "Skeletonization" Dynamique (Architecture à la demande)
 Utilisée pour donner une "carte" à l'IA sans saturer sa mémoire.
-- **Principe :** Injection des signatures sans le corps des fonctions.
+- *Principe :* Injection des signatures sans le corps des fonctions.
 
 #term[
   *Exemple :* Pour comprendre une dépendance, on fournit le code complet du service appelant, mais seulement la signature du client appelé : \
@@ -209,9 +209,9 @@ Le Context Engineering inclut également la structuration des consignes pour gar
     align: horizon,
     stroke: 0.5pt + white,
     [*Méthode*], [*Donnée Brute*], [*Ingénierie de Contexte*],
-    [**Volume**], [Tout le code source (Millions)], [Sélection ciblée (Kilos)],
-    [**Précision**], [Risque élevé d'hallucinations], [Réponses basées sur des faits extraits],
-    [**Performance**], [Lenteur (sature la VRAM)], [Inférence fluide et rapide]
+    [*Volume*], [Tout le code source (Millions)], [Sélection ciblée (Kilos)],
+    [*Précision*], [Risque élevé d'hallucinations], [Réponses basées sur des faits extraits],
+    [*Performance*], [Lenteur (sature la VRAM)], [Inférence fluide et rapide]
   )
 ]#v(1em)
 
@@ -224,13 +224,13 @@ Une base vectorielle n'est pertinente que si la donnée qui l'alimente est quali
 
 Pour obtenir une IA capable de faire le lien entre un besoin métier et une fonction technique, le RAG doit agréger trois typologies de documents :
 
-- **Le Code Source Structuré (Java, TypeScript, SQL) :**
+- *Le Code Source Structuré (Java, TypeScript, SQL) :*
   Il ne doit pas être ingéré comme du texte brut. Il est "parsé" (souvent via un Abstract Syntax Tree) pour que la base de données comprenne où commence et où s'arrête une méthode ou une classe.
 
-- **La Documentation Technique (Markdown, Swagger) :**
+- *La Documentation Technique (Markdown, Swagger) :*
   Les fichiers `README` et les contrats d'API (JSON/YAML). Ils sont cruciaux car ils expliquent les "règles" du projet que le code seul ne décrit pas toujours.
 
-- **Le Contexte Métier et Fonctionnel (PDF, Jira) :**
+- *Le Contexte Métier et Fonctionnel (PDF, Jira) :*
   Les spécifications (PDF/Word) et l'historique des tickets Jira. C'est cette couche qui permet à l'IA de comprendre le *pourquoi* d'une implémentation.
 
 == Le Pipeline de Transformation (Le "Comment")
@@ -245,9 +245,9 @@ On ne "jette" pas un PDF de 50 pages ou une classe Java de 2000 lignes directeme
     align: horizon,
     stroke: 0.5pt + white,
     [*Étape de l'ETL*], [*Action sur la donnée*], [*Exemple concret*],
-    [**1. Nettoyage**], [Exclusion systématique du bruit : fichiers compilés (`.class`), dossiers de dépendances, ou logs applicatifs.], [Le RAG ignore automatiquement le dossier `node_modules/`.],
-    [**2. Chunking Intelligent**], [Le code est découpé par "bloc logique". Les PDF/Docs métiers sont découpés avec un chevauchement (overlap) de 15%.], [Un chunk = la méthode Java entière `calculBiomasse()`.],
-    [**3. Enrichissement (Métadonnées)**], [On attache des "tags" invisibles à chaque vecteur pour forcer la recherche dans un périmètre précis.], [Ajout des tags `[Module: fs-core]` et `[Type: Spec]`.]
+    [*1. Nettoyage*], [Exclusion systématique du bruit : fichiers compilés (`.class`), dossiers de dépendances, ou logs applicatifs.], [Le RAG ignore automatiquement le dossier `node_modules/`.],
+    [*2. Chunking Intelligent*], [Le code est découpé par "bloc logique". Les PDF/Docs métiers sont découpés avec un chevauchement (overlap) de 15%.], [Un chunk = la méthode Java entière `calculBiomasse()`.],
+    [*3. Enrichissement (Métadonnées)*], [On attache des "tags" invisibles à chaque vecteur pour forcer la recherche dans un périmètre précis.], [Ajout des tags `[Module: fs-core]` et `[Type: Spec]`.]
   )
 ]
 

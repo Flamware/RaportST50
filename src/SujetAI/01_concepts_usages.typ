@@ -22,9 +22,9 @@
 
 = Contexte Technique en 2026
 
-L'arrivée de **Gemma 4** (2.3B à 31B) marque un tournant pour le développement "on-premise". Avec une fenêtre de contexte native de **128k tokens**, ces modèles permettent d'analyser des structures de code complexes.
+L'arrivée de Gemma 4 (2.3B à 31B) marque un tournant pour le développement "on-premise". Avec une fenêtre de contexte native de 128k tokens, ces modèles permettent d'analyser des structures de code complexes.
 
-Toutefois, le projet Farmstar nécessite évidemment bien plus que 128k tokens de code source, d'où la nécessité d'adopter des stratégies de **Context Engineering** pour maximiser l'efficacité de l'IA locale sans saturer la mémoire.
+Toutefois, le projet Farmstar nécessite évidemment bien plus que 128k tokens de code source, d'où la nécessité d'adopter des stratégies de Context Engineering pour maximiser l'efficacité de l'IA locale sans saturer la mémoire.
 
 = Cas d'Usage
 

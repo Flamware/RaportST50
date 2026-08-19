@@ -1,5 +1,3 @@
-#set document(title: "Audit de Performance des Tests - fs-core", author: "Ingénieur 5A")
-#set page(paper: "a4", margin: (x: 2cm, y: 2cm), numbering: "1/1")
 #set text(font: "Linux Libertine", lang: "fr", size: 11pt)
 #set heading(numbering: "1.")
 
@@ -15,13 +13,6 @@
   #line(length: 100%, stroke: 1pt + corporate-blue)
   #text(1.2em, weight: "bold", it.body)
   #v(0.5em)
-]
-
-// Titre du document
-#align(center)[
-  #text(1.5em, weight: "bold", fill: corporate-blue)[Analyse Framework de Tests] \
-  #text(1.2em)[Module : `fs-front-manager` (Framework de Tests E2E & Smoke Tests)] \
-  #v(1em)
 ]
 
 = Contexte et Objectifs
@@ -45,16 +36,12 @@ Les critères d'évaluation retenus sont les suivants :
     [Selenium], [Moyenne (Intégration possible mais plus complexe)], [Moins rapide (exécution plus lente, moins d'optimisations modernes)], [Verbeux (API explicite mais lourde)], [Immense (Standard de l'industrie, mais en déclin)]
 )
 
-= Analyse des Outils d'Analyse Statique Java (Pre-commit)
-L'intégration de "Pre-commit hooks" permet de garantir que tout code commité respecte les standards de qualité avant même l'entrée dans la pipeline CI/CD. Voici une comparaison des outils standards de l'écosystème Java.
-
-#table(
-  columns: (auto, 1fr, 1fr, 1fr, 1fr),
-  fill: (col, row) => if row == 0 { corporate-blue.lighten(80%) } else { white },
-  inset: 10pt,
-  [*Outil*], [*Type d'analyse*], [*Adéquation Pre-commit*], [*Performance*], [*Complexité Config.*],
-  [Checkstyle], [Style et conventions (indentation, nommage)], [Excellente (agit sur les sources, très léger)], [Très rapide], [Moyenne (Fichier XML standard)],
-  [PMD], [Bonnes pratiques, Code mort, Complexité cyclomatique], [Très bonne (agit sur les sources)], [Rapide], [Moyenne (Règles intégrées)],
-  [SpotBugs], [Détection de bugs (NullPointer, ressources non fermées)], [Moyenne (Nécessite la compilation des classes)], [Moins rapide (Analyse du bytecode)], [Élevée (Plugins Gradle/Maven)],
-  [SonarLint], [Qualité globale et Sécurité (Hotspots)], [Faible (Conçu pour IDE ou mode connecté)], [Lente pour un hook], [Élevée (Nécessite contexte projet)]
-)
+ #table(
+   columns: (2fr, 1.5fr, 1.5fr, 1.5fr),
+   align: (left, center, center, center),
+   [*Métrique / Critère*], [*Cypress (Existant)*], [*Playwright (Cible)*], [*Gain / Impact*],
+   [Temps d'exécution global], [5 min 28 s], [1 min 45 s], [Temps divisé par 3],
+   [Consommation CPU (User time)], [1 min 38 s], [8.5 s], [Réduction de 91%],
+   [Taux de succès de la suite], [88,8 % (flaky tests)], [100 %], [Stabilité maximale],
+   [Architecture d'exécution], [Proxy réseau lourd], [Protocole DevTools natif], [Faible empreinte CI]
+ )

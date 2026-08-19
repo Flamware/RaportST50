@@ -28,12 +28,12 @@
 Le travail effectué a consisté à refactorer la classe `GenericHydrator` pour le rendre moins complexe et rendre compte de sa testabilité.
 
 === Refactoring de `GenericHydrator`
-- **Objectif** : Simplifier la classe `GenericHydrator` qui comportait 3 HashMaps et des appels redondants.
-- **Approche** : J'ai utilisé un Record Java pour encapsuler les données de manière plus structurée, réduisant ainsi la complexité et améliorant la lisibilité du code.
-- **Résultat** : La classe est désormais plus concise, avec une meilleure séparation des responsabilités et une meilleure maintenabilité.
+- Objectif : Simplifier la classe `GenericHydrator` qui comportait 3 HashMaps et des appels redondants.
+- Approche : J'ai utilisé un Record Java pour encapsuler les données de manière plus structurée, réduisant ainsi la complexité et améliorant la lisibilité du code.
+- Résultat : La classe est désormais plus concise, avec une meilleure séparation des responsabilités et une meilleure maintenabilité.
 
 === Testabilité
-- **Objectif** : Tester la classe `GenericHydrator` de manière efficace.
+- Objectif : Tester la classe `GenericHydrator` de manière efficace.
 - **Approche** : 
     - J'ai créé des tests unitaires pour valider le comportement de la classe refactorée, en utilisant des données d'entrée contrôlées pour vérifier les sorties attendues.
     - J'ai créer un DTO et une Entity de test pour simuler les données d'entrée et de sortie, ce qui a permis de couvrir les différents scénarios d'utilisation de la classe.

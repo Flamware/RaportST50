@@ -1,0 +1,61 @@
+3.2. R&D en intelligence artificielle agentique
+
+3.2.1. Contexte technique et objectifs
+    - Pourquoi une IA agentique pour Farmstar ?
+    - Contraintes : code volumineux, données internes, sécurité,
+      outils métier, modèle local
+    - Cas d'utilisation retenus
+
+3.2.2. Construction du contexte : RAG et MCP
+    - Problème d'accès à l'information
+    - RAG
+    - MCP
+    - complémentarité RAG / MCP / LLM
+
+3.2.3. Première expérimentation : Open WebUI
+    - architecture initiale
+    - fonctionnement avec plusieurs agents
+    - résultats du PoC
+    - limites rencontrées
+    - exemple concret de tâche transverse
+
+3.2.4. Problématique d'orchestration
+    - pourquoi l'isolation des agents devient bloquante
+    - besoin d'un état partagé
+    - besoin de routage
+    - besoin de boucles / conditions
+    - critères de choix de la nouvelle architecture
+
+3.2.5. Conception de l'orchestrateur avec LangGraph
+    - principe du graphe d'état
+    - état partagé
+    - nœuds
+    - transitions
+    - superviseur
+    - routage dynamique
+    - sous-graphes
+
+3.2.6. Mise en œuvre du workflow TEST_COVERAGE
+    - Gatherer
+    - Analyzer
+    - Solver
+    - données transmises entre eux
+    - MCP
+    - sorties structurées Pydantic / Instructor
+    - routages conditionnels
+    - boucles de rétroaction
+
+3.2.7. Industrialisation de l'architecture
+    - POO / classe Agent
+    - typage / registres
+    - prompts / skills
+    - Docker
+    - LangFuse
+    - modularité
+
+3.2.8. Résultats, limites et perspectives
+    - ce que le PoC permet réellement
+    - gains / améliorations
+    - limites
+    - ce qui reste expérimental
+    - évolutions envisagées
