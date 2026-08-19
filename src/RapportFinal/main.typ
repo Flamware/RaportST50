@@ -10,7 +10,7 @@
   size: 14pt,
   lang: "fr"
 )
-#image("Couverture type rapport UTBM_P20XX.pdf", width: 100%, height: 100%)
+#image("Couverture type rapport.pdf", width: 100%, height: 100%)
 
 #pagebreak()
 

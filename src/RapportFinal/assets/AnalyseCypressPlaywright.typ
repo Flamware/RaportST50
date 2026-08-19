@@ -1,25 +1,23 @@
 #set text(font: "Linux Libertine", lang: "fr", size: 11pt)
-#set heading(numbering: "1.")
 
 // Couleurs
 #let corporate-blue = rgb("#004C97") // Bleu type Airbus/Corp
 #let alert-red = rgb("#D32F2F")
 #let success-green = rgb("#388E3C")
 
-// Styles des titres
-#show heading: set text(fill: corporate-blue)
-#show heading.where(level: 1): it => [
+// Style des titres (hors système de numérotation du rapport)
+#let section-title(body) = [
   #v(0.5em)
   #line(length: 100%, stroke: 1pt + corporate-blue)
-  #text(1.2em, weight: "bold", it.body)
+  #text(1.2em, weight: "bold", fill: corporate-blue, body)
   #v(0.5em)
 ]
 
-= Contexte et Objectifs
+#section-title[Contexte et Objectifs]
 Dans le cadre de l'amélioration de la couverture des tests du project Farmstar, il a été décidé d'adopter un framework de tests E2E afin de compléter les tests d'intégration existants.
 Ce document présente une analyse comparative entre plusieurs frameworks populaires (Cypress, Playwright, Selenium) pour déterminer la solution la plus adaptée aux besoins du projet.
 
-= Analyse Comparative des Frameworks de Tests E2E
+#section-title[Analyse Comparative des Frameworks de Tests E2E]
 Les critères d'évaluation retenus sont les suivants :
 - *Facilité d'Intégration* : Capacité à s'intégrer dans la pipeline CI/CD existante.
 - *Performance* : Temps d'exécution des tests et consommation de ressources.

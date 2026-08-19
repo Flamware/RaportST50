@@ -31,9 +31,9 @@ l'agent. L'orchestration de ces différents composants a ensuite constitué
 l'objet principal du travail réalisé avec LangGraph.
 
 
-=== Contexte technique, modèles locaux et cas d'usage ciblés
+=== Contexte, contraintes et Context Engineering
 
-==== Contraintes liées aux données et à l'exécution locale
+*Contraintes liées aux données et à l'exécution locale*
 
 La première contrainte identifiée concernait la confidentialité du code de
 l'entreprise. Une utilisation directe d'API cloud propriétaires aurait impliqué
@@ -70,7 +70,7 @@ Le problème était donc le suivant :
 Cette contrainte a conduit à dissocier le raisonnement du modèle de la
 construction de son contexte.
 
-==== Cas d'usage étudiés
+*Cas d'usage étudiés*
 
 L'intégration de l'intelligence artificielle dans le projet Farmstar a été
 envisagée autour de plusieurs activités susceptibles d'assister les
@@ -92,9 +92,9 @@ mais de construire un système permettant au modèle d'accéder de manière
 contrôlée aux informations nécessaires à la résolution de la tâche.
 
 
-=== Le concept de Context Engineering
+*Le concept de Context Engineering*
 
-==== Limites de l'injection brute du contexte
+*Limites de l'injection brute du contexte*
 
 La première approche envisageable consiste à fournir directement au modèle
 les fichiers nécessaires à la tâche. Cette solution devient rapidement
@@ -120,7 +120,7 @@ le projet sous l'angle du *Context Engineering*.
 L'objectif n'est plus seulement de rechercher des documents, mais de construire
 dynamiquement un contexte adapté à la tâche en cours.
 
-==== Découpage sémantique du code
+*Découpage sémantique du code*
 
 Une première étape consiste à ne pas découper le code uniquement selon une
 taille arbitraire en caractères ou en tokens.
@@ -138,7 +138,7 @@ l'analyse de code source. Un découpage effectué au milieu d'une méthode ou
 entre deux éléments syntaxiquement liés peut supprimer une partie du sens
 nécessaire au raisonnement.
 
-==== Enrichissement par les métadonnées
+*Enrichissement par les métadonnées*
 
 Les fragments récupérés sont également associés à des informations permettant
 de conserver leur contexte d'origine.
@@ -157,7 +157,7 @@ l'architecture globale.
 Cette distinction est importante dans un monorepo, où plusieurs modules peuvent
 contenir des classes ayant des noms similaires.
 
-==== Recherche hybride
+*Recherche hybride*
 
 La recherche utilisée ne repose pas uniquement sur la similarité vectorielle.
 Deux types de recherche complémentaires sont utilisés.
@@ -175,7 +175,7 @@ importante des systèmes de recherche reposant uniquement sur les embeddings :
 une similarité sémantique élevée ne signifie pas nécessairement que le
 fragment contient l'identifiant exact recherché.
 
-==== Re-ranking et skeletonization
+*Re-ranking et skeletonization*
 
 Une étape de re-ranking permet ensuite de réévaluer la pertinence des premiers
 résultats obtenus.
@@ -197,9 +197,9 @@ il travaille sur une représentation sélectionnée et organisée des
 informations pertinentes.
 
 
-=== Le Model Context Protocol : un catalogue d'outils métier
+*Le Model Context Protocol : un catalogue d'outils métier*
 
-==== Du modèle de langage à l'agent
+*Du modèle de langage à l'agent*
 
 La construction du contexte ne suffit cependant pas à résoudre toutes les
 tâches. Dans certaines situations, le système doit pouvoir effectuer une
@@ -222,7 +222,7 @@ peut invoquer lorsque la tâche le nécessite. Le modèle n'accède donc pas
 directement au système de fichiers : il passe par une interface d'outils
 contrôlée.
 
-==== Conception du serveur FastMCP
+*Conception du serveur FastMCP*
 
 Un serveur FastMCP a été développé pour exposer les principales opérations
 nécessaires à l'exploration du projet.
@@ -244,7 +244,7 @@ l'agent de son raisonnement.
 Le LLM décide qu'une information lui est nécessaire, mais l'accès effectif
 à cette information est réalisé par un outil contrôlé.
 
-==== Complémentarité entre RAG et MCP
+*Complémentarité entre RAG et MCP*
 
 Le RAG et le MCP répondent ainsi à deux besoins différents.
 
@@ -264,9 +264,9 @@ statique, ni autorisé à accéder directement et sans contrôle à l'ensemble d
 système.
 
 
-=== Expérimentation sous Open WebUI et motivation de la migration
+=== De l'expérimentation Open WebUI à l'orchestration LangGraph
 
-==== Une première validation fonctionnelle
+*Une première validation fonctionnelle*
 
 Avant de développer un orchestrateur spécifique, une première expérimentation
 a été réalisée avec Open WebUI.
@@ -285,7 +285,7 @@ Cette étape a permis de confirmer la faisabilité technique de l'approche.
 Cependant, elle a également mis en évidence une limite importante qui ne
 concernait pas les capacités individuelles des agents, mais leur coordination.
 
-==== Le problème de l'isolation des agents
+*Le problème de l'isolation des agents*
 
 Chaque agent disposait de son propre contexte de conversation. Les agents
 étaient donc capables de réaliser individuellement leurs tâches, mais ils ne
@@ -326,7 +326,7 @@ L'expérimentation Open WebUI a donc validé le concept d'agent individuel mais
 a montré que cette solution ne répondait pas complètement au besoin
 d'orchestration.
 
-==== Reformulation du problème
+*Reformulation du problème*
 
 La question n'était donc plus :
 
@@ -348,7 +348,7 @@ principale d'orchestration au profit d'un middleware dédié.
 Le choix s'est porté sur LangGraph.
 
 
-=== Problématique d'orchestration
+*Problématique d'orchestration*
 
 La migration vers LangGraph répond à plusieurs besoins identifiés lors de
 l'expérimentation précédente.
@@ -378,9 +378,9 @@ L'architecture devait donc répondre simultanément à quatre exigences :
 C'est précisément dans cette logique que le graphe d'agents a été conçu.
 
 
-=== Conception de l'orchestrateur avec LangGraph
+*Conception de l'orchestrateur avec LangGraph*
 
-==== Principe du graphe d'état
+*Principe du graphe d'état*
 
 LangGraph a été utilisé comme couche d'orchestration.
 
@@ -401,7 +401,7 @@ lorsque le contexte le nécessite.
 Le graphe constitue donc une représentation de l'organisation du raisonnement
 plutôt qu'une simple succession d'appels à un modèle de langage.
 
-==== L'état partagé
+*L'état partagé*
 
 L'élément central de l'orchestration est l'état partagé.
 
@@ -431,7 +431,7 @@ Cette séparation améliore également la lisibilité de l'architecture : les
 données partagées sont définies au niveau du workflow et non implicitement
 dans les prompts.
 
-==== Le superviseur central
+*Le superviseur central*
 
 Le graphe principal est piloté par un agent Superviseur.
 
@@ -459,7 +459,7 @@ Le superviseur joue ainsi un rôle comparable à celui d'un contrôleur dans une
 architecture logicielle classique : il ne réalise pas toutes les opérations,
 mais détermine quelle partie du système doit être appelée.
 
-==== Routage dynamique
+*Routage dynamique*
 
 Une caractéristique importante de l'architecture est que le chemin
 d'exécution peut dépendre du contenu de la requête.
@@ -486,7 +486,7 @@ introduit potentiellement du bruit ou une transformation intermédiaire de
 l'information. Éviter une étape inutile permet donc également de conserver
 plus directement le contexte fourni par l'utilisateur.
 
-==== Sous-graphes
+*Sous-graphes*
 
 Afin de conserver une architecture modulaire, les workflows métier sont
 organisés sous forme de sous-graphes.
@@ -513,7 +513,7 @@ unité fonctionnelle et raccordé au mécanisme de routage du superviseur.
 // ainsi que les routages conditionnels et les retours éventuels.
 
 
-=== Mise en œuvre du workflow TEST_COVERAGE
+=== Mise en œuvre et robustesse du workflow TEST_COVERAGE
 
 Le premier cas d'usage structurant de l'orchestrateur concerne l'analyse de la
 couverture des tests.
@@ -531,7 +531,7 @@ Le workflow a donc été décomposé en trois rôles :
 
 Cette décomposition permet de distinguer la collecte de l'information, son
 analyse et la production du résultat.
-==== Les types de tâches :
+*Les types de tâches :*
 Afin de mieux partitionner le workflow, une requête utilisateur est toujours associées à un type de tâche.
 Quelques exemples de types de tâches sont :
 - `EXPLAIN`: l'utilisateur demande une explication sur un élément du code de test d'une feature.
@@ -541,7 +541,7 @@ Quelques exemples de types de tâches sont :
 
 Ainsi, en fonction de la tâche détectée, l'exécution du graphe diffère. Par exemple, si la tâche est de type `EXPLAIN`, le graphe ne passera pas par l'Agent `Solver`, mais uniquement par l'Agent `Gatherer` pour récupérer le contexte nécessaire et par l'Agent `Analyzer` pour analyser le contexte et produire une explication. (Voir ci-dessous le comportement des Agents)
 
-==== Le Gatherer : constitution du contexte technique
+*Le Gatherer : constitution du contexte technique*
 
 Le `Gatherer` constitue le point d'entrée métier du sous-graphe
 `TEST_COVERAGE`.
@@ -572,7 +572,7 @@ Il peut notamment contenir :
 Le `Gatherer` réalise donc principalement un travail de récupération
 d'informations et non de génération.
 
-==== L'Analyzer : identification des écarts
+*L'Analyzer : identification des écarts*
 
 Le deuxième rôle est assuré par l'`Analyzer`.
 
@@ -597,7 +597,7 @@ L'utilisation d'une étape d'analyse intermédiaire permet ainsi de réduire le
 risque de produire directement des tests sans avoir correctement identifié le
 besoin.
 
-==== Le Solver : génération des tests
+*Le Solver : génération des tests*
 
 Le `Solver` intervient après l'analyse.
 
@@ -615,7 +615,7 @@ lui-même l'ensemble du contexte.
 
 La génération devient alors une étape spécialisée dans un workflow plus large.
 
-==== Pourquoi trois agents ?
+*Pourquoi trois agents ?*
 
 La séparation `Gatherer / Analyzer / Solver` n'a pas été réalisée uniquement
 pour multiplier le nombre d'agents.
@@ -648,7 +648,7 @@ la génération des tests, ou d'améliorer l'analyse sans modifier les outils
 MCP.
 
 
-=== Exécution conditionnelle et optimisation du workflow
+*Exécution conditionnelle et optimisation du workflow*
 
 L'un des enseignements de l'expérimentation a été que la présence de plusieurs
 agents ne signifie pas que tous doivent être exécutés à chaque requête.
@@ -681,7 +681,7 @@ Ce point est particulièrement important avec des modèles locaux, pour lesquels
 les temps d'inférence peuvent devenir significatifs lorsque plusieurs étapes
 de raisonnement sont enchaînées.
 
-=== Routage et boucles de rétroaction
+*Routage et boucles de rétroaction*
 
 Le graphe ne se limite pas à une succession de nœuds.
 
@@ -711,7 +711,7 @@ autonome des sous-graphes, capable de supprimer certaines étapes lorsqu'elles
 ne sont pas pertinentes.
 
 
-=== Architecture orientée objet et robustesse des agents
+*Architecture orientée objet et robustesse des agents*
 
 La mise en place de LangGraph ne constituait pas à elle seule une architecture
 suffisamment maintenable.
@@ -723,7 +723,7 @@ d'accès aux outils.
 Pour éviter cette duplication, le framework d'agents a été refactorisé autour
 d'une architecture orientée objet.
 
-==== Classe abstraite Agent
+*Classe abstraite Agent*
 
 Une classe abstraite `Agent` sert de base commune aux différents agents.
 
@@ -744,7 +744,7 @@ un contrat commun.
 
 Cela permet une prise en main plus rapide pour un développeur qui souhaiterait ajouter un nouveau cas d'usage.
 
-==== Séparation des configurations
+*Séparation des configurations*
 
 Les prompts et les *skills* ont été séparés du code de l'agent.
 
@@ -761,7 +761,7 @@ structurel du framework.
 Enfin, cette organisation rend plus simple la comparaison de plusieurs
 configurations.
 
-==== Typage et registres
+*Typage et registres*
 
 Le routage repose également sur des types explicites.
 
@@ -787,7 +787,7 @@ L'utilisation de types explicites réduit ce risque et centralise les valeurs
 autorisées.
 
 
-=== Sorties structurées et validation des décisions du LLM
+*Sorties structurées et validation des décisions du LLM*
 
 Un autre problème rencontré dans une architecture agentique concerne la
 fiabilité des sorties du modèle.
@@ -802,7 +802,7 @@ Il n'est donc pas suffisant de demander au modèle de répondre sous la forme
 d'un JSON dans son prompt. Le système doit également vérifier que la réponse
 respecte réellement le schéma attendu.
 
-==== Pydantic
+*Pydantic*
 
 Pydantic est utilisé pour définir les structures attendues.
 
@@ -814,7 +814,7 @@ contraintes déterministes du programme.
 Le modèle reste responsable de la décision, mais la structure de cette
 décision est contrôlée par l'application.
 
-==== Instructor et mécanisme de retry
+*Instructor et mécanisme de retry*
 
 La bibliothèque Instructor a également été étudiée afin de renforcer cette
 gestion des sorties structurées.
@@ -830,9 +830,9 @@ La validation structurée constitue donc une forme de frontière entre la
 partie probabiliste du système et sa partie logicielle déterministe.
 
 
-=== Déploiement et industrialisation du prototype
+=== Déploiement, observabilité et validation
 
-==== Conteneurisation
+*Conteneurisation*
 
 Une fois les différents composants assemblés, l'architecture devait pouvoir
 être exécutée de manière reproductible.
@@ -856,7 +856,7 @@ local, aux APIs externes (LangSmith) et facilite la reproduction du PoC.
 Elle constitue également une première étape vers une éventuelle intégration
 plus large dans l'environnement de développement de l'équipe.
 
-==== Interface d'ingestion et administration
+*Interface d'ingestion et administration*
 
 Une interface Streamlit complète le système afin de faciliter certaines
 opérations d'administration et d'ingestion.
@@ -870,7 +870,7 @@ permet ainsi de conserver une architecture modulaire.
 Le remplacement de l'interface utilisateur ne nécessite pas de modifier le
 fonctionnement interne du graphe.
 
-==== Validation et tests automatisés
+*Validation et tests automatisés*
 
 Un système multi-agents non déterministe (appels LLM réels) ne peut pas être
 validé de la même manière qu'un service backend classique. Une suite de
@@ -911,7 +911,7 @@ Cette suite couvre actuellement les sous-graphes `code_companion` et
 extension aux sous-graphes restants (`doc_generator`,
 `functional_companion`) fait partie des travaux à poursuivre.
 
-=== Observabilité et traçabilité
+*Observabilité et traçabilité*
 
 Un système multi-agents est difficile à déboguer si l'on ne peut pas observer
 les étapes intermédiaires de son exécution, ainsi que sa réflexion (CoT).
@@ -946,7 +946,7 @@ Dans une architecture agentique, la qualité d'un système ne peut donc pas
 pouvoir analyser le chemin qui a conduit à cette réponse.
 
 
-=== Déroulement d'une requête complète
+*Déroulement d'une requête complète*
 
 Afin de mieux comprendre l'architecture, il est possible de suivre le
 traitement d'une requête de couverture de tests.
@@ -986,7 +986,9 @@ Chaque agent réalise une partie spécialisée du travail et communique son
 résultat par l'intermédiaire de l'état du graphe.
 
 
-=== Bilan de l'architecture
+=== Bilan, limites et perspectives
+
+*Bilan de l'architecture*
 
 La migration d'Open WebUI vers LangGraph n'a donc pas constitué un simple
 changement de bibliothèque.
@@ -1016,7 +1018,7 @@ Enfin, elle permet d'introduire progressivement des mécanismes plus avancés
 de routage et de contrôle.
 
 
-=== Limites identifiées
+*Limites identifiées*
 
 Malgré ces résultats, le système développé reste un prototype de R&D et ne
 doit pas être présenté comme un système complètement industrialisé.
@@ -1043,7 +1045,7 @@ développeur et de réduire le travail de recherche et de préparation, et non
 de supprimer les mécanismes classiques de revue et de validation du code.
 
 
-=== Résultats et perspectives
+*Résultats et perspectives*
 
 Le travail réalisé a permis d'obtenir un PoC multi-agents opérationnel basé
 sur LangGraph et MCP, capable d'analyser du code source et de construire des

@@ -1,22 +1,19 @@
 #set text(font: "Linux Libertine", lang: "fr", size: 11pt)
-#set heading(numbering: "1.")
 
 // Couleurs
 #let corporate-blue = rgb("#004C97") // Bleu type Airbus/Corp
 #let alert-red = rgb("#D32F2F")
 #let success-green = rgb("#388E3C")
 
-// Styles des titres
-#show heading: set text(fill: corporate-blue)
-#show heading.where(level: 1): it => [
+// Style des titres (hors système de numérotation du rapport)
+#let section-title(body) = [
   #v(0.5em)
   #line(length: 100%, stroke: 1pt + corporate-blue)
-  #text(1.2em, weight: "bold", it.body)
+  #text(1.2em, weight: "bold", fill: corporate-blue, body)
   #v(0.5em)
 ]
 
-
-= Analyse des Outils d'Analyse Statique Java (Pre-commit)
+#section-title[Analyse des Outils d'Analyse Statique Java (Pre-commit)]
 L'intégration de "Pre-commit hooks" permet de garantir que tout code commité respecte les standards de qualité avant même l'entrée dans la pipeline CI/CD. Voici une comparaison des outils standards de l'écosystème Java.
 
 #table(

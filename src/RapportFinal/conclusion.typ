@@ -1,7 +1,7 @@
 #text(fill: rgb("4a90e2"))[= Conclusion]
 
 == Synthèse globale
-Ce projet de fin d'études au sein de l'agence Magellium s'inscrit dans une démarche globale d'optimisation de l'ingénierie logicielle. Qu'il s'agisse de résoudre les problématiques de performance de la CI/CD ou de concevoir l'architecture IA de demain, l'approche retenue a toujours privilégié la rigueur architecturale, la qualité de code et l'autonomie des développeurs. Sur le plan financier, l'optimisation de la CI/CD représente un gain estimé entre 610 € et 915 € par an pour l'équipe (voir section Estimation des gains), un chiffre volontairement conservateur et mesuré plutôt qu'extrapolé.
+Ce projet de fin d'études au sein de l'agence Magellium s'inscrit dans une démarche globale d'optimisation de l'ingénierie logicielle. Qu'il s'agisse de résoudre les problématiques de performance de la CI/CD ou de concevoir l'architecture IA de demain, l'approche retenue a toujours privilégié la rigueur architecturale, la qualité de code et l'autonomie des développeurs. Sur le plan financier, l'optimisation de la CI/CD représente un gain estimé entre 811 € et 1216 € par an pour l'équipe (voir section Estimation des gains), un chiffre volontairement conservateur et mesuré plutôt qu'extrapolé.
 
 == Analyse réflexive des compétences développées
 Ce stage a mobilisé et développé des compétences sur trois plans distincts.
@@ -10,7 +10,7 @@ Sur le plan *technique*, j'ai appris à concevoir des architectures robustes dan
 
 Sur le plan *méthodologique*, j'ai renforcé une discipline d'audit avant action : profiler avant d'optimiser, mesurer avant de conclure. Cette rigueur, appliquée d'abord à la CI/CD, m'a servi de référence lorsqu'il a fallu l'appliquer à un domaine bien moins mature : évaluer un système à base de LLM impose d'accepter l'incertitude (voir la section Limites identifiées) plutôt que de la masquer, et de refuser d'extrapoler un gain au-delà de ce qui est réellement mesurable (voir la section Estimation des gains).
 
-Sur le plan de la *posture professionnelle*, l'axe R&D en IA agentique n'était pas le sujet initial du stage : je l'ai proposé, argumenté et fait valider en interne après avoir stabilisé l'axe CI/CD. Cette capacité à identifier une opportunité, à la défendre avec des résultats concrets, puis à la mener en autonomie jusqu'à un prototype fonctionnel, constitue à mes yeux l'apport le plus structurant de ce stage pour la suite de ma carrière — d'autant qu'elle a directement contribué à l'obtention de mon premier CDI dans le domaine de l'intelligence artificielle.
+Sur le plan de la *posture professionnelle*, ce stage ne s'est pas déroulé autour d'un sujet fixé à l'avance : les chantiers à mener se sont dessinés au fil de l'eau, en discussion continue avec mon tuteur, en fonction des besoins du projet, de mes envies et de mes capacités. L'axe CI/CD a émergé le premier de cette démarche ; l'axe R&D en IA agentique n'est venu qu'ensuite, une fois ce premier chantier stabilisé, et je l'ai proposé, argumenté et fait valider en interne. Cette capacité à identifier une opportunité dans un contexte peu cadré, à la défendre avec des résultats concrets, puis à la mener en autonomie jusqu'à un prototype fonctionnel, constitue à mes yeux l'apport le plus structurant de ce stage pour la suite de ma carrière — d'autant qu'elle a directement contribué à l'obtention de mon premier CDI dans le domaine du developpement logiciel et de l'intelligence artificielle.
 
 == Perspectives
 Plusieurs axes d'évolution peuvent prolonger ces travaux :

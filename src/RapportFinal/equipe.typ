@@ -26,8 +26,8 @@ Ce double positionnement m'a conféré des responsabilités techniques important
 Mon périmètre d'action s'est étendu sur l'ensemble du cycle de vie logiciel, allant du backend jusqu'à l'orchestration de modèles de langage :
 
 - *DevOps et Qualité logicielle* : J'ai mené des audits de performance sur les pipelines d'intégration continue (CI/CD) sous GitLab, intégrant des hooks de pré-commit et pré-push (SonarLint, Checkstyle, Spotless) pour garantir la robustesse du code.
-- *Ingénierie Backend et Tests* : J'ai travaillé sur la refactorisation de composants en Java (via de la réflexion) et mené la migration complète des tests d'API vers de nouveaux standards (Bruno pour l'intégration, Playwright pour l'E2E frontend).
-- *R&D en IA Agentique* : J'ai conçu de bout en bout une infrastructure locale basée sur LangGraph et le Model Context Protocol (MCP). J'ai configuré des workflows multi-agents capables d'analyser du code source, de générer des plans de tests et de rédiger des tests de manière autonome.
+- *Ingénierie Backend et Tests* : J'ai travaillé sur la refactorisation de composants en Java (via de la réflexion) et contribué à la migration d'une partie des tests d'API vers Bruno (base d'intégration déjà existante) ainsi qu'à des tests E2E frontend avec Playwright.
+- *R&D en IA Agentique* : J'ai conçu de bout en bout une infrastructure locale d'agents orchestrés (LangGraph, Model Context Protocol), depuis l'expérimentation initiale jusqu'au prototype fonctionnel (détails en section Travail Réalisé).
 
 === Autonomie et force de proposition technique
 
@@ -35,7 +35,7 @@ L'une des caractéristiques principales de ce stage a été la grande autonomie 
 
 - *Benchmark et migration d'outils* : Face aux lenteurs des tests End-to-End côté frontend, j'ai initié des benchmarks de divers framework de tests frontend. Ce choix a permis de diviser le temps d'exécution par trois (de 5m28s à 1m45s) et d'améliorer la stabilité de la suite de tests.
 - *Choix architecturaux en IA* : Lors du développement de l'assistant IA, j'ai identifié les limites d'isolation des agents sous Open WebUI. J'ai alors proposé et implémenté une migration vers LangGraph, introduisant un superviseur centralisé et un routage dynamique orienté objet (POO) pour permettre une communication fluide entre agents.
-- *Optimisation des ressources* : Mes initiatives sur le profilage du cache Spring Boot ont permis de réduire le temps de build local de 15 minutes à seulement 5 minutes, améliorant ainsi considérablement la vélocité des pipelines de l'équipe.
+- *Optimisation des ressources* : Mes initiatives sur le profilage du cache Spring Boot ont permis de réduire le temps de build local de 17 minutes à seulement 3 minutes, améliorant ainsi considérablement la vélocité des pipelines de l'équipe.
 
 === Standardisation et transmission des connaissances
 

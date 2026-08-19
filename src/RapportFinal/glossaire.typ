@@ -1,7 +1,5 @@
 #text(fill: rgb("4a90e2"))[= Glossaire]
 #linebreak()
-Ce glossaire a pour but de définir les termes techniques utilisés dans ce rapport. Il est destiné à aider les lecteurs à comprendre les concepts et les technologies abordés.
-
 - *Full-stack* : Se réfère à la capacité de travailler sur l'ensemble des couches d'une application, du front-end (interface utilisateur) au back-end (logique métier et base de données).
 - *DevOps* : Un ensemble de pratiques qui combine le développement logiciel (Dev) et les opérations informatiques (Ops) pour améliorer la collaboration, l'automatisation et la livraison continue des applications.
 - *CI/CD (Continuous Integration / Continuous Delivery)* : Ensemble de pratiques et de pipelines automatisés permettant de valider, tester, packager et déployer continuellement les modifications logicielles.
