@@ -39,25 +39,50 @@
 - OpenAI – *Business Pricing (ChatGPT Business)*, openai.com/business/chatgpt-pricing, 2026.
 - Anthropic – *Claude Team Plan Pricing*, claude.com/pricing, 2026.
 
-== Annexe 2 : Tableau d'Analyse Réflexive des Compétences (Obligatoire UTBM)
+== Annexe 2 : Tableau d'Analyse Réflexive des Compétences
 
 Ce tableau met en correspondance les missions réalisées durant le stage avec les blocs de compétences du référentiel officiel du diplôme d'ingénieur UTBM, spécialité Informatique #footnote[UTBM, _Référentiel de compétences — Diplôme d'ingénieur, spécialité Informatique_, DFP_FISE-FISA_Informatique_Referentiel_Competences_29112024.].
 
+#[
+#set text(size: 10pt)
+
 #table(
-  columns: (1.8fr, 1.9fr, 2.4fr),
-  align: (left, left, left),
-  [*Bloc de compétences (référentiel)*], [*Compétence(s) mobilisée(s)*], [*Mission / action concrète durant le stage*],
-  [Bloc 1 — Identifier, modéliser et résoudre des problèmes informatiques], [Comp. 3 : concevoir et intégrer des algorithmes et structures de données optimisées], [Audit et profilage du cache Spring Boot pour réduire le temps de build local ; conception du pattern `GenericHydrator` pour unifier des services métier complexes.],
-  [Bloc 1 — Identifier, modéliser et résoudre des problèmes informatiques], [Comp. 4 : reconnaître un problème du domaine de l'IA et mettre en œuvre les méthodes adaptées], [Identification des limites d'isolation des agents sous Open WebUI ; conception d'un prototype d'orchestration multi-agents pour y répondre.],
-  [Bloc 2 — Concevoir, développer, mettre au point et conduire des projets d'application informatique], [Comp. 5 : appliquer les paradigmes de la programmation orientée objet en collaboration], [Architecture orientée objet des agents (classe abstraite `Agent`, registres de configuration) du workflow `TEST_COVERAGE`.],
-  [Bloc 2 — Concevoir, développer, mettre au point et conduire des projets d'application informatique], [Comp. 6 : réaliser des études et développements informatiques en équipe], [Migration d'une partie des tests d'API vers Bruno, mise en place de tests E2E Playwright, rédaction de hooks Git `pre-commit`/`pre-push`.],
-  [Bloc 3 — Concevoir, piloter, organiser, optimiser et gérer des systèmes d'information], [Comp. 9 : concevoir et administrer des bases de données], [Intégration de Qdrant (base vectorielle) pour la recherche sémantique du PoC RAG.],
-  [Bloc 3 — Concevoir, piloter, organiser, optimiser et gérer des systèmes d'information], [Comp. 13 : auditer les systèmes d'information et préconiser des évolutions], [Audit des pipelines GitLab CI (temps de build, goulots d'étranglement) et mise en œuvre des optimisations retenues.],
-  [Bloc 5 — Élaborer, concevoir et mener des stratégies d'intégration et d'évolution des installations matérielles et logicielles], [Comp. 24 : sélectionner, assembler et intégrer des composants informatiques], [Sélection et intégration raisonnée d'un outillage (LangGraph, MCP/FastMCP, Instructor, Docker) après benchmarks comparatifs (ex. Playwright vs Cypress).],
-  [Bloc 6 — Définir, planifier, organiser et manager un projet d'ingénierie innovant face à des problèmes non familiers], [Comp. 28 : analyser un problème non familier selon une approche systémique], [Proposition, argumentation et conduite en autonomie de l'axe R&D IA agentique, non prévu au départ du stage.],
-  [Bloc 6 — Définir, planifier, organiser et manager un projet d'ingénierie innovant face à des problèmes non familiers], [Comp. 29 : déployer une démarche d'innovation responsable], [Validation interne de l'axe IA sur la base de résultats concrets ; estimation chiffrée et mesurée (non extrapolée) du gain financier de l'optimisation CI/CD.],
-  [Bloc 7 — Analyse systémique et critique des impacts environnementaux, sociétaux et humains], [Comp. 30 : identifier les enjeux liés au développement soutenable], [Réduction du temps de calcul des runners CI (empreinte de calcul) ; prise en compte de la souveraineté des données dans le choix d'une infrastructure IA locale plutôt qu'un SaaS externe.],
+  columns: (auto, 1.7fr, 2.5fr),
+  align: (center + horizon, left + horizon, left + horizon),
+  inset: 7pt,
+  stroke: 0.5pt + gray.lighten(30%),
+  fill: (col, row) => if row == 0 { rgb("4a90e2").lighten(80%) } else if calc.odd(row) { white } else { rgb("f2f2f2") },
+  table.header(
+    [*Bloc*], [*Compétence mobilisée*], [*Mission / action concrète durant le stage*],
+  ),
+  table.cell(rowspan: 2)[*Bloc 1*],
+  [Comp. 3 — algorithmes et structures de données optimisées], [Audit et profilage du cache Spring Boot pour réduire le temps de build local ; conception du pattern `GenericHydrator` pour unifier des services métier complexes.],
+  [Comp. 4 — reconnaître un problème IA et méthodes adaptées], [Identification des limites d'isolation des agents sous Open WebUI ; conception d'un prototype d'orchestration multi-agents pour y répondre.],
+  table.cell(rowspan: 2)[*Bloc 2*],
+  [Comp. 5 — programmation orientée objet collaborative], [Architecture orientée objet des agents (classe abstraite `Agent`, registres de configuration) du workflow `TEST_COVERAGE`.],
+  [Comp. 6 — études et développements informatiques en équipe], [Migration d'une partie des tests d'API vers Bruno, tests E2E Playwright, hooks Git `pre-commit`/`pre-push`.],
+  table.cell(rowspan: 2)[*Bloc 3*],
+  [Comp. 9 — conception et administration de bases de données], [Intégration de Qdrant (base vectorielle) pour la recherche sémantique du PoC RAG.],
+  [Comp. 13 — auditer les systèmes d'information et préconiser des évolutions], [Audit des pipelines GitLab CI (temps de build, goulots d'étranglement) et mise en œuvre des optimisations retenues.],
+  [*Bloc 5*],
+  [Comp. 24 — sélectionner, assembler et intégrer des composants informatiques], [Sélection et intégration raisonnée d'un outillage (LangGraph, MCP/FastMCP, Instructor, Docker) après benchmarks comparatifs (ex. Playwright vs Cypress).],
+  table.cell(rowspan: 2)[*Bloc 6*],
+  [Comp. 28 — analyser un problème non familier selon une approche systémique], [Proposition, argumentation et conduite en autonomie de l'axe R&D IA agentique, non prévu au départ du stage.],
+  [Comp. 29 — déployer une démarche d'innovation responsable], [Validation interne de l'axe IA sur la base de résultats concrets ; estimation chiffrée et mesurée (non extrapolée) du gain financier de l'optimisation CI/CD.],
+  [*Bloc 7*],
+  [Comp. 30 — enjeux liés au développement soutenable], [Réduction du temps de calcul des runners CI (empreinte de calcul) ; souveraineté des données dans le choix d'une infrastructure IA locale plutôt qu'un SaaS externe.],
 )
+
+#v(0.3em)
+#text(size: 9pt, style: "italic")[
+  Bloc 1 : Identifier, modéliser et résoudre des problèmes informatiques · #linebreak()
+  Bloc 2 : Concevoir, développer, mettre au point et conduire des projets d'application informatique · #linebreak()
+  Bloc 3 : Concevoir, piloter, organiser, optimiser et gérer des systèmes d'information · #linebreak()
+  Bloc 5 : Élaborer, concevoir et mener des stratégies d'intégration et d'évolution des installations matérielles et logicielles · #linebreak()
+  Bloc 6 : Définir, planifier, organiser et manager un projet d'ingénierie innovant face à des problèmes non familiers · #linebreak()
+  Bloc 7 : Analyse systémique et critique des impacts environnementaux, sociétaux et humains
+]
+]
 
 == Annexe 3 : Analyse Framework de test Frontend
 #include("assets/AnalyseCypressPlaywright.typ")

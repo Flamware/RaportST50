@@ -10,7 +10,7 @@
   size: 14pt,
   lang: "fr"
 )
-#image("Couverture type rapport.pdf", width: 100%, height: 100%)
+#image("Couverture type rapport UTBM_P2026.pdf", width: 100%, height: 100%)
 
 #pagebreak()
 
@@ -33,6 +33,8 @@
 #pagebreak()
 #include "glossaire.typ"
 #pagebreak()
+#include "resume.typ"
+#pagebreak()
 #include "table_des_matières.typ"
 #pagebreak()
 
@@ -51,3 +53,11 @@
 #include "conclusion.typ"
 #pagebreak()
 #include "annexes.typ"
+#pagebreak()
+
+#set page(
+  margin: 0cm,
+  header: none,
+  footer: none
+)
+#image("Couverture type rapport UTBM_P2026.pdf", page: 2, width: 100%, height: 100%)

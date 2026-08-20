@@ -14,7 +14,6 @@ Sur le plan de la *posture professionnelle*, ce stage ne s'est pas déroulé aut
 
 == Perspectives
 Plusieurs axes d'évolution peuvent prolonger ces travaux :
-1. *Industrialisation du PoC IA :* Connecter l'orchestrateur LangGraph directement aux pipelines GitLab de Magellium pour automatiser les revues de code et l'audit de sécurité sur chaque Merge Request
-.
+1. *Industrialisation du PoC IA :* Connecter l'orchestrateur LangGraph directement aux pipelines GitLab de Magellium pour automatiser les revues de code et l'audit de sécurité sur chaque Merge Request.
 2. *Extension des Serveurs MCP :* Ajouter des intégrations directes vers les APIs Jira et SonarQube pour permettre à l'agent de résoudre des tickets de bout en bout.
 3. *Généralisation du pattern Hydrateur :* Étendre le `GenericHydrator` aux autres microservices du projet Farmstar.

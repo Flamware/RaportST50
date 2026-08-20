@@ -83,7 +83,7 @@ Côté frontend, j'ai mis en place une suite de tests de fumée (*Smoke Tests*) 
  L'avantage de Playwright réside dans sa capacité à intercepter nativement le réseau via une fonction dédiée ("injectAuthHeaders"), injectant de manière dynamique les en-têtes d'authentification ("x-authenticated-user", "x-authenticated-roles") sans dépendre d'un sous-système complexe. De plus, le découplage des tests frontend vis-à-vis du backend via un système de moquage par fichiers ".har" a permis de sécuriser le build sur la CI GitLab.
 
 === Stratégie "Shift-Left"
-Pour garantir la pérennité de ces optimisations, j'ai mis en place une stratégie "Shift-Left" via des hooks Git. J'ai configuré des scripts "pre-commit" (exécutant Spotless, Checkstyle et SonarLint uniquement sur les fichiers modifiés) et "pre-push" (lançant les Smoke Tests impactés). Cela permet d'intercepter les régressions directement sur le poste du développeur, avant de solliciter la CI.
+Pour garantir la pérennité de ces optimisations, j'ai mis en place une stratégie "Shift-Left" via des hooks Git. Après comparaison des outils d'analyse statique Java disponibles (*voir Annexe 4*), j'ai configuré des scripts "pre-commit" (exécutant Spotless, Checkstyle et SonarLint uniquement sur les fichiers modifiés) et "pre-push" (lançant les Smoke Tests impactés). Cela permet d'intercepter les régressions directement sur le poste du développeur, avant de solliciter la CI.
 
 == Axe Transverse : Industrialisation et Pattern GenericHydrator
 En parallèle des chantiers de CI et d'IA, un travail d'architecture logicielle a été mené sur le backend Java pour simplifier des services métier complexes.
@@ -97,6 +97,8 @@ La création et la mise à jour d'entités JPA complexes nécessitaient une vér
 Pour valider ce composant sans dupliquer de code de test, j'ai recommandé dans le guide de bonnes pratiques l'utilisation par l'équipe des tests paramétrés JUnit 5 (`@ParameterizedTest`, `@MethodSource`). Cette approche permet de couvrir un large éventail de cas aux limites (*edge cases*) et d'assurer une remontée propre des exceptions métier (converties en erreurs HTTP 400).
 
 === Chronologie et Planning de la Mission
+Ce planning n'a pas été fixé au premier jour du stage : il s'agit d'une projection mensuelle glissante, révisée en concertation avec mon tuteur au fil de l'avancement (voir *Posture professionnelle*, en conclusion, sur l'absence de sujet fixé à l'avance).
+
 #table(
   columns: (1.5fr, 2fr, 2fr),
   align: (left, left, left),
